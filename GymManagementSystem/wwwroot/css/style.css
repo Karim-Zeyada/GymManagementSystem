@@ -79,13 +79,17 @@ pre {
     }
 
 /* ^ Start Header */
-header.home-section header p {
+header.home-section header p,
+.home-section header p,
+.home-section > header > p {
     position: relative;
     padding-left: 22px;
     font-size: 18px;
 }
 
-    header.home-section header p::before {
+    header.home-section header p::before,
+    .home-section header p::before,
+    .home-section > header > p::before {
         content: '';
         position: absolute;
         left: 0;
@@ -96,12 +100,23 @@ header.home-section header p {
         border-radius: 10px;
     }
 
+.character img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 24px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
 @media screen and (max-width: 500px) {
-    header.home-section header p {
+    header.home-section header p,
+    .home-section header p,
+    .home-section > header > p {
         padding: 0;
     }
 
-        header.home-section header p::before {
+        header.home-section header p::before,
+        .home-section header p::before,
+        .home-section > header > p::before {
             display: none !important;
         }
 }
