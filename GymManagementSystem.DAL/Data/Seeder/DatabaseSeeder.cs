@@ -1,4 +1,4 @@
-﻿namespace GymManagementSystem.Data.Seeder
+﻿namespace GymManagementSystem.DAL.Data.Seeder
 {
     public static class DatabaseSeeder
     {
