@@ -7,10 +7,14 @@ namespace GymManagementSystem.PL.Controllers
 {
     public class PlansController : Controller
     {
-        public IPlanRepository planRepo = new PlanRepository();
+        private readonly IPlanRepository _planRepo;
+        public PlansController(IPlanRepository planRepo)
+        {
+            _planRepo = planRepo;
+        }
         public async Task<IActionResult> Index()
         {
-            var plans = await planRepo.GetAllAsync();
+            var plans = await _planRepo.GetAllAsync();
             return View(plans);
         }
 
@@ -21,7 +25,7 @@ namespace GymManagementSystem.PL.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var plan = await planRepo.GetByIdAsync(id);
+            var plan = await _planRepo.GetByIdAsync(id);
             
             if (plan is null)
             {
