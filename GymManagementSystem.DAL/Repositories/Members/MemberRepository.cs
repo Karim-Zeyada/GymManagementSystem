@@ -48,4 +48,18 @@ public class MemberRepository : GenericRepository<Member>, IMemberRepository
             .Include(b => b.Session)
             .AnyAsync(b => b.MemberId == memberId && b.Session != null && b.Session.EndDate >= now);
     }
+
+    public async Task<int> GetActiveMembersCountAsync(DateTime now)
+    {
+        return await _context.Memberships
+            .Where(m => m.EndDate >= now)
+            .Select(m => m.MemberId)
+            .Distinct()
+            .CountAsync();
+    }
+
+    public async Task<int> GetTotalCountAsync()
+    {
+        return await _dbSet.CountAsync();
+    }
 }

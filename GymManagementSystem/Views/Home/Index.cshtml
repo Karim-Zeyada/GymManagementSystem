@@ -1,3 +1,5 @@
+@model GymManagementSystem.BLL.ViewModels.Analytics.AnalyticsViewModel
+
 <!-- ^ Hero Section -->
             <div class="row align-items-center g-4 my-2">
                 <div class="col-12 col-md-7 col-lg-7">
@@ -17,19 +19,19 @@
                             <div class="row g-3 py-2 border-top border-bottom">
                                 <div class="col-4">
                                     <div class="stat">
-                                        <span class="fw-bolder fs-3 text-primary-color d-block">100+</span>
+                                        <span class="fw-bolder fs-3 text-primary-color d-block">@(Model?.TotalMembers ?? 0)</span>
                                         <span class="text-muted small">Total Members</span>
                                     </div>
                                 </div>
                                 <div class="col-4">
                                     <div class="stat">
-                                        <span class="fw-bolder fs-3 text-primary-color d-block">85</span>
+                                        <span class="fw-bolder fs-3 text-primary-color d-block">@(Model?.ActiveMembers ?? 0)</span>
                                         <span class="text-muted small">Active Members</span>
                                     </div>
                                 </div>
                                 <div class="col-4">
                                     <div class="stat">
-                                        <span class="fw-bolder fs-3 text-primary-color d-block">20+</span>
+                                        <span class="fw-bolder fs-3 text-primary-color d-block">@(Model?.TotalTrainers ?? 0)</span>
                                         <span class="text-muted small">Expert Trainers</span>
                                     </div>
                                 </div>
@@ -37,19 +39,19 @@
                             <div class="row g-3 py-2">
                                 <div class="col-4">
                                     <div class="stat">
-                                        <span class="fw-bolder fs-4 text-black-alternative d-block">3</span>
+                                        <span class="fw-bolder fs-4 text-black-alternative d-block">@(Model?.UpcomingSessions ?? 0)</span>
                                         <span class="text-muted small">Upcoming Sessions</span>
                                     </div>
                                 </div>
                                 <div class="col-4">
                                     <div class="stat">
-                                        <span class="fw-bolder fs-4 text-black-alternative d-block">5</span>
+                                        <span class="fw-bolder fs-4 text-black-alternative d-block">@(Model?.OngoingSessions ?? 0)</span>
                                         <span class="text-muted small">Ongoing Sessions</span>
                                     </div>
                                 </div>
                                 <div class="col-4">
                                     <div class="stat">
-                                        <span class="fw-bolder fs-4 text-black-alternative d-block">20+</span>
+                                        <span class="fw-bolder fs-4 text-black-alternative d-block">@(Model?.CompletedSessions ?? 0)</span>
                                         <span class="text-muted small">Completed Sessions</span>
                                     </div>
                                 </div>

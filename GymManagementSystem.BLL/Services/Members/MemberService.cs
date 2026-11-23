@@ -1,36 +1,31 @@
+using AutoMapper;
 using GymManagementSystem.BLL.ViewModels.Members;
 using GymManagementSystem.DAL.Models;
 using GymManagementSystem.DAL.Models.ValueObjects;
-using GymManagementSystem.DAL.Repositories.Members;
+using GymManagementSystem.DAL.Repositories.UnitOfWork;
 
 namespace GymManagementSystem.BLL.Services.Members;
 
 public class MemberService : IMemberService
 {
-    private readonly IMemberRepository _memberRepository;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
 
-    public MemberService(IMemberRepository memberRepository)
+    public MemberService(IUnitOfWork unitOfWork, IMapper mapper)
     {
-        _memberRepository = memberRepository;
+        _unitOfWork = unitOfWork;
+        _mapper = mapper;
     }
 
     public async Task<IEnumerable<MemberViewModel>> GetAllMembersAsync()
     {
-        var members = await _memberRepository.GetAllAsync();
-        return members.Select(m => new MemberViewModel
-        {
-            Id = m.Id,
-            Photo = m.Photo,
-            Name = m.Name,
-            Email = m.Email,
-            Gender = m.Gender,
-            Phone = m.Phone
-        }).ToList();
+        var members = await _unitOfWork.Members.GetAllAsync();
+        return _mapper.Map<IEnumerable<MemberViewModel>>(members);
     }
 
     public async Task<MemberDetailsViewModel?> GetMemberDetailsAsync(int id)
     {
-        var member = await _memberRepository.GetWithDetailsAsync(id);
+        var member = await _unitOfWork.Members.GetWithDetailsAsync(id);
         if (member == null) return null;
 
         var activeMembership = member.Memberships
@@ -61,41 +56,32 @@ public class MemberService : IMemberService
 
     public async Task<HealthRecordDetailsViewModel?> GetHealthRecordDetailsAsync(int memberId)
     {
-        var member = await _memberRepository.GetWithHealthRecordAsync(memberId);
-        if (member?.HealthRecord == null) return null;
+        var member = await _unitOfWork.Members.GetWithHealthRecordAsync(memberId);
+        if (member == null || member.HealthRecord == null) return null;
 
+        var hr = member.HealthRecord;
         return new HealthRecordDetailsViewModel
         {
             MemberId = member.Id,
             MemberName = member.Name,
-            Height = member.HealthRecord.Height,
-            Weight = member.HealthRecord.Weight,
-            BloodType = member.HealthRecord.BloodType.ToString(),
-            Note = member.HealthRecord.MedicalConditions
+            Height = hr.Height,
+            Weight = hr.Weight,
+            BloodType = hr.BloodType.ToString(),
+            Note = hr.MedicalConditions
         };
     }
 
     public async Task<EditMemberViewModel?> GetMemberForEditAsync(int id)
     {
-        var member = await _memberRepository.GetByIdAsync(id);
+        var member = await _unitOfWork.Members.GetByIdAsync(id);
         if (member == null) return null;
 
-        return new EditMemberViewModel
-        {
-            Id = member.Id,
-            Photo = member.Photo,
-            Name = member.Name,
-            Email = member.Email,
-            Phone = member.Phone,
-            BuildingNumber = member.Address?.BuildingNumber ?? 0,
-            Street = member.Address?.Street ?? string.Empty,
-            City = member.Address?.City ?? string.Empty
-        };
+        return _mapper.Map<EditMemberViewModel>(member);
     }
 
     public async Task<DeleteMemberViewModel?> GetMemberForDeleteAsync(int id)
     {
-        var member = await _memberRepository.GetByIdAsync(id);
+        var member = await _unitOfWork.Members.GetWithDetailsAsync(id);
         if (member == null) return null;
 
         return new DeleteMemberViewModel
@@ -109,22 +95,23 @@ public class MemberService : IMemberService
 
     public async Task<(bool Success, string? ErrorMessage)> CreateMemberAsync(CreateMemberViewModel model)
     {
-        // 1. Email uniqueness
-        if (await _memberRepository.IsEmailExistsAsync(model.Email))
+        // 1. Email uniqueness check
+        if (await _unitOfWork.Members.IsEmailExistsAsync(model.Email))
         {
-            return (false, "A member with this email address already exists.");
+            return (false, "This email address is already in use by another user.");
         }
 
-        // 2. Phone uniqueness
-        if (await _memberRepository.IsPhoneExistsAsync(model.Phone))
+        // 2. Phone uniqueness check
+        if (await _unitOfWork.Members.IsPhoneExistsAsync(model.Phone))
         {
-            return (false, "A member with this phone number already exists.");
+            return (false, "This phone number is already registered.");
         }
 
-        // 3. Age validation (must be at least 16 years old)
+        // 3. Minimum age validation (16 years)
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
         var age = today.Year - model.DateOfBirth.Year;
         if (model.DateOfBirth > today.AddYears(-age)) age--;
+
         if (age < 16)
         {
             return (false, "Member must be at least 16 years old to register.");
@@ -156,32 +143,34 @@ public class MemberService : IMemberService
             }
         };
 
-        _memberRepository.Add(member);
-        await _memberRepository.SaveChangesAsync();
+        _unitOfWork.Members.Add(member);
+        await _unitOfWork.SaveChangesAsync();
 
         return (true, null);
     }
 
     public async Task<(bool Success, string? ErrorMessage)> UpdateMemberAsync(EditMemberViewModel model)
     {
-        var member = await _memberRepository.GetByIdAsync(model.Id);
+        var member = await _unitOfWork.Members.GetByIdAsync(model.Id);
         if (member == null)
         {
             return (false, "Member not found.");
         }
 
         // Email uniqueness check excluding current member
-        if (await _memberRepository.IsEmailExistsAsync(model.Email, model.Id))
+        if (await _unitOfWork.Members.IsEmailExistsAsync(model.Email, model.Id))
         {
             return (false, "This email address is already in use by another user.");
         }
 
         // Phone uniqueness check excluding current member
-        if (await _memberRepository.IsPhoneExistsAsync(model.Phone, model.Id))
+        if (await _unitOfWork.Members.IsPhoneExistsAsync(model.Phone, model.Id))
         {
             return (false, "This phone number is already in use by another user.");
         }
 
+        // Update fields
+        member.Name = model.Name.Trim();
         member.Email = model.Email.Trim();
         member.Phone = model.Phone.Trim();
         member.UpdatedAt = DateTime.UtcNow;
@@ -194,28 +183,34 @@ public class MemberService : IMemberService
         member.Address.Street = model.Street.Trim();
         member.Address.City = model.City.Trim();
 
-        _memberRepository.Update(member);
-        await _memberRepository.SaveChangesAsync();
+        _unitOfWork.Members.Update(member);
+        await _unitOfWork.SaveChangesAsync();
 
         return (true, null);
     }
 
     public async Task<(bool Success, string? ErrorMessage)> DeleteMemberAsync(int id)
     {
-        var member = await _memberRepository.GetByIdAsync(id);
+        var member = await _unitOfWork.Members.GetByIdAsync(id);
         if (member == null)
         {
             return (false, "Member not found.");
         }
 
-        // Check if member has active bookings
-        if (await _memberRepository.HasActiveBookingsAsync(id))
+        // Check active bookings
+        if (await _unitOfWork.Members.HasActiveBookingsAsync(id))
         {
-            return (false, "Cannot delete member with active session reservations.");
+            return (false, "Cannot delete a member with active or ongoing session bookings.");
         }
 
-        _memberRepository.Delete(member);
-        await _memberRepository.SaveChangesAsync();
+        var healthRecord = await _unitOfWork.HealthRecords.GetByIdAsync(id);
+        if (healthRecord != null)
+        {
+            _unitOfWork.HealthRecords.Delete(healthRecord);
+        }
+
+        _unitOfWork.Members.Delete(member);
+        await _unitOfWork.SaveChangesAsync();
 
         return (true, null);
     }

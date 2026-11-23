@@ -36,4 +36,9 @@ public class TrainerRepository : GenericRepository<Trainer>, ITrainerRepository
         return await _context.Sessions
             .AnyAsync(s => s.TrainerId == trainerId && s.EndDate >= now);
     }
+
+    public async Task<int> GetTotalCountAsync()
+    {
+        return await _dbSet.CountAsync();
+    }
 }

@@ -1,47 +1,54 @@
 ﻿using GymManagementSystem.DAL.Data.Contexts;
 using GymManagementSystem.DAL.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
-namespace GymManagementSystem.DAL.Data.Seeder
+namespace GymManagementSystem.DAL.Data.Seeder;
+
+public static class PlanSeeder
 {
-    public static class PlanSeeder
+    public static async Task SeedAsync(GymDbContext dbContext)
     {
-        public static async Task SeedAsync(GymDbContext dbContext)
+        // 1. Idempotency check: only seed if the table is empty
+        if (await dbContext.Plans.AnyAsync())
         {
-            bool hasAnyPlans = await dbContext.Plans.AnyAsync();
+            return;
+        }
 
-            if (hasAnyPlans)
+        // 2. Locate plans.json
+        var candidatePaths = new[]
+        {
+            Path.Combine(AppContext.BaseDirectory, "Data", "Seeder", "plans.json"),
+            Path.Combine(AppContext.BaseDirectory, "plans.json"),
+            Path.Combine(Directory.GetCurrentDirectory(), "..", "GymManagementSystem.DAL", "Data", "Seeder", "plans.json"),
+            Path.Combine(Directory.GetCurrentDirectory(), "Data", "Seeder", "plans.json")
+        };
+
+        string? filePath = candidatePaths.FirstOrDefault(File.Exists);
+
+        if (filePath == null)
+        {
+            return;
+        }
+
+        // 3. Read & Deserialize
+        var json = await File.ReadAllTextAsync(filePath);
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
+        var plans = JsonSerializer.Deserialize<List<Plan>>(json, options);
+
+        if (plans != null && plans.Any())
+        {
+            var now = DateTime.UtcNow;
+            foreach (var plan in plans)
             {
-                return;
-            } 
+                plan.CreatedAt = now;
+            }
 
-            List<Plan> plans = new List<Plan>
-            {
-                new Plan {
-                    Name = "Basic",
-                    Description = "Access to gym equipment and facilities.",
-                    Price = 300,
-                    DurationDays = 30, // Added duration
-                    IsActive = true,
-                    CreatedAt = DateTime.UtcNow },
-
-                new Plan {
-                    Name = "Standard",
-                    Description = "Includes Basic plan benefits plus group classes.",
-                    Price = 500,
-                    DurationDays = 30, // Added duration
-                    IsActive = true,
-                    CreatedAt = DateTime.UtcNow },
-
-                new Plan {
-                    Name = "Premium",
-                    Description = "Includes Standard plan benefits plus personal training sessions.",
-                    Price = 900,
-                    DurationDays = 30, // Added duration
-                    IsActive = true,
-                    CreatedAt = DateTime.UtcNow }
-            };
-
+            // 4. Insert & Save
             await dbContext.Plans.AddRangeAsync(plans);
             await dbContext.SaveChangesAsync();
         }

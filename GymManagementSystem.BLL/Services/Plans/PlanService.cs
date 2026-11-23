@@ -1,72 +1,52 @@
+using AutoMapper;
 using GymManagementSystem.BLL.ViewModels.Plans;
-using GymManagementSystem.DAL.Repositories.Plans;
+using GymManagementSystem.DAL.Repositories.UnitOfWork;
 
 namespace GymManagementSystem.BLL.Services.Plans;
 
 public class PlanService : IPlanService
 {
-    private readonly IPlanRepository _planRepository;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
 
-    public PlanService(IPlanRepository planRepository)
+    public PlanService(IUnitOfWork unitOfWork, IMapper mapper)
     {
-        _planRepository = planRepository;
+        _unitOfWork = unitOfWork;
+        _mapper = mapper;
     }
 
     public async Task<IEnumerable<PlanViewModel>> GetAllPlansAsync()
     {
-        var plans = await _planRepository.GetAllAsync();
-        return plans.Select(p => new PlanViewModel
-        {
-            Id = p.Id,
-            Name = p.Name,
-            Price = p.Price,
-            DurationDays = p.DurationDays,
-            Description = p.Description,
-            IsActive = p.IsActive
-        }).ToList();
+        var plans = await _unitOfWork.Plans.GetAllAsync();
+        return _mapper.Map<IEnumerable<PlanViewModel>>(plans);
     }
 
     public async Task<PlanDetailsViewModel?> GetPlanDetailsAsync(int id)
     {
-        var plan = await _planRepository.GetByIdAsync(id);
+        var plan = await _unitOfWork.Plans.GetByIdAsync(id);
         if (plan == null) return null;
 
-        return new PlanDetailsViewModel
-        {
-            Id = plan.Id,
-            Name = plan.Name,
-            Price = plan.Price,
-            DurationDays = plan.DurationDays,
-            Description = plan.Description,
-            IsActive = plan.IsActive
-        };
+        return _mapper.Map<PlanDetailsViewModel>(plan);
     }
 
     public async Task<EditPlanViewModel?> GetPlanForEditAsync(int id)
     {
-        var plan = await _planRepository.GetByIdAsync(id);
+        var plan = await _unitOfWork.Plans.GetByIdAsync(id);
         if (plan == null) return null;
 
-        return new EditPlanViewModel
-        {
-            Id = plan.Id,
-            Name = plan.Name,
-            Price = plan.Price,
-            DurationDays = plan.DurationDays,
-            Description = plan.Description
-        };
+        return _mapper.Map<EditPlanViewModel>(plan);
     }
 
     public async Task<(bool Success, string? ErrorMessage)> UpdatePlanAsync(EditPlanViewModel model)
     {
-        var plan = await _planRepository.GetByIdAsync(model.Id);
+        var plan = await _unitOfWork.Plans.GetByIdAsync(model.Id);
         if (plan == null)
         {
             return (false, "Plan not found.");
         }
 
         // Business rule: Cannot update a plan with active memberships
-        if (await _planRepository.HasActiveMembershipsAsync(model.Id))
+        if (await _unitOfWork.Plans.HasActiveMembershipsAsync(model.Id))
         {
             return (false, "Cannot update a plan with active memberships to preserve existing contracts.");
         }
@@ -77,22 +57,22 @@ public class PlanService : IPlanService
         plan.Description = model.Description.Trim();
         plan.UpdatedAt = DateTime.UtcNow;
 
-        _planRepository.Update(plan);
-        await _planRepository.SaveChangesAsync();
+        _unitOfWork.Plans.Update(plan);
+        await _unitOfWork.SaveChangesAsync();
 
         return (true, null);
     }
 
     public async Task<(bool Success, string? ErrorMessage)> ToggleStatusAsync(int id)
     {
-        var plan = await _planRepository.GetByIdAsync(id);
+        var plan = await _unitOfWork.Plans.GetByIdAsync(id);
         if (plan == null)
         {
             return (false, "Plan not found.");
         }
 
         // Business rule: Cannot deactivate a plan with active memberships
-        if (plan.IsActive && await _planRepository.HasActiveMembershipsAsync(id))
+        if (plan.IsActive && await _unitOfWork.Plans.HasActiveMembershipsAsync(id))
         {
             return (false, "Cannot deactivate a plan with active memberships.");
         }
@@ -100,8 +80,8 @@ public class PlanService : IPlanService
         plan.IsActive = !plan.IsActive;
         plan.UpdatedAt = DateTime.UtcNow;
 
-        _planRepository.Update(plan);
-        await _planRepository.SaveChangesAsync();
+        _unitOfWork.Plans.Update(plan);
+        await _unitOfWork.SaveChangesAsync();
 
         return (true, null);
     }
