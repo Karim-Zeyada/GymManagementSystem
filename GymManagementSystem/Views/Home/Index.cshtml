@@ -1,391 +1,351 @@
 @model GymManagementSystem.BLL.ViewModels.Analytics.AnalyticsViewModel
 
+@{
+    ViewData["Title"] = "Elite Athletic Training";
+}
+
 <!-- ^ Hero Section -->
-            <div class="row align-items-center g-4 my-2">
-                <div class="col-12 col-md-7 col-lg-7">
-                    <div class="info home-section">
-                        <header class="text-black-alternative">
-                            <h1 class="fw-bolder display-3 mb-4">
-                                Your body can
-                                <span class="text-primary-color">stand almost</span> anything
-                            </h1>
+<div class="row align-items-center g-5 py-4 my-2">
+    <div class="col-12 col-lg-7">
+        <div class="pe-lg-4">
+            <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-black bg-opacity-60 border border-secondary border-opacity-25 mb-4">
+                <i class="bi bi-fire text-power-accent fs-6"></i>
+                <span class="small font-mono text-power-accent fw-bold text-uppercase" style="letter-spacing: 1.5px;">ELITE PERFORMANCE &bull; ATHLETIC LUXURY</span>
+            </div>
 
-                            <p class="mb-4 text-muted">
-                                It's your mind that needs convincing. Push past your limits, stay committed, and watch as your body transforms into a powerhouse of strength and resilience. Start your journey today & discover what you're truly capable of!
-                            </p>
-                        </header>
+            <h1 class="display-3 fw-bold text-white mb-4 text-uppercase font-display" style="line-height: 1.05; letter-spacing: 1px;">
+                BUILT FOR THE <br />
+                <span class="text-power-accent" style="text-shadow: 0 0 32px rgba(255, 85, 0, 0.45);">RELENTLESS.</span>
+            </h1>
 
-                        <div class="stats-bar my-4">
-                            <div class="row g-3 py-2 border-top border-bottom">
-                                <div class="col-4">
-                                    <div class="stat">
-                                        <span class="fw-bolder fs-3 text-primary-color d-block">@(Model?.TotalMembers ?? 0)</span>
-                                        <span class="text-muted small">Total Members</span>
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="stat">
-                                        <span class="fw-bolder fs-3 text-primary-color d-block">@(Model?.ActiveMembers ?? 0)</span>
-                                        <span class="text-muted small">Active Members</span>
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="stat">
-                                        <span class="fw-bolder fs-3 text-primary-color d-block">@(Model?.TotalTrainers ?? 0)</span>
-                                        <span class="text-muted small">Expert Trainers</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row g-3 py-2">
-                                <div class="col-4">
-                                    <div class="stat">
-                                        <span class="fw-bolder fs-4 text-black-alternative d-block">@(Model?.UpcomingSessions ?? 0)</span>
-                                        <span class="text-muted small">Upcoming Sessions</span>
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="stat">
-                                        <span class="fw-bolder fs-4 text-black-alternative d-block">@(Model?.OngoingSessions ?? 0)</span>
-                                        <span class="text-muted small">Ongoing Sessions</span>
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="stat">
-                                        <span class="fw-bolder fs-4 text-black-alternative d-block">@(Model?.CompletedSessions ?? 0)</span>
-                                        <span class="text-muted small">Completed Sessions</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+            <p class="text-secondary fs-5 mb-4" style="line-height: 1.7; max-width: 600px; color: #CBD5E1 !important;">
+                Stop negotiating with your potential. Experience high-caliber coaching, Olympic-grade equipment, and science-backed protocols designed to break your plateau.
+            </p>
 
-                        <div class="buttons my-4 d-flex flex-wrap gap-3">
-                            <a asp-controller="Plans" asp-action="Index" class="btn get-started text-decoration-none">
-                                Get Started
-                            </a>
-
-                            <a href="#about" class="btn explore-more text-decoration-none">
-                                Explore More
-                            </a>
-                        </div>
+            <!-- Live Performance KPI Bar -->
+            <div class="power-card p-4 my-4">
+                <div class="row g-4 text-center">
+                    <div class="col-4 border-end border-secondary border-opacity-25">
+                        <div class="display-6 fw-bold text-power-accent font-mono">@(Model?.TotalMembers ?? 0)</div>
+                        <div class="text-white small text-uppercase font-display fw-semibold">Active Athletes</div>
                     </div>
-                </div>
-
-                <div class="col-12 col-md-5 col-lg-5 text-center">
-                    <div class="character">
-                        <img src="~/images/Theo Vance.jpg" alt="Theo Vance - Head Coach" class="img-fluid" />
+                    <div class="col-4 border-end border-secondary border-opacity-25">
+                        <div class="display-6 fw-bold text-white font-mono">@(Model?.TotalTrainers ?? 0)</div>
+                        <div class="text-white small text-uppercase font-display fw-semibold">Elite Coaches</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="display-6 fw-bold text-power-accent font-mono">@(Model?.UpcomingSessions ?? 0)</div>
+                        <div class="text-white small text-uppercase font-display fw-semibold">Live Classes</div>
                     </div>
                 </div>
             </div>
 
-            <!-- ^ Marquee / Ticker Bar -->
-            <div class="bar bg-primary-color d-flex py-3 text-white fw-bolder align-items-center rounded-3 my-5 overflow-hidden shadow-sm">
-                <p class="py-0 my-0 overflow-hidden text-nowrap w-100 text-center fs-5 text-uppercase">
-                    outdoor & online trainers
-                    <img src="~/images/star.svg" alt="star icon" class="mx-3" /> personal training
-                    <img src="~/images/star.svg" alt="star icon" class="mx-3" /> live classes
-                    <img src="~/images/star.svg" alt="star icon" class="mx-3" /> certified coaches
-                    <img src="~/images/star.svg" alt="star icon" class="mx-3" /> strength & fitness
+            <div class="d-flex flex-wrap gap-3 mt-4">
+                <a asp-controller="Plans" asp-action="Index" class="btn btn-power-primary btn-lg px-5">
+                    Explore Plans
+                    <i class="bi bi-arrow-right ms-2"></i>
+                </a>
+                <a asp-controller="Booking" asp-action="Index" class="btn btn-power-outline btn-lg px-4 text-white">
+                    <i class="bi bi-calendar3 me-2 text-power-accent"></i>
+                    View Schedule
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Athlete Card -->
+    <div class="col-12 col-lg-5 text-center">
+        <div class="position-relative d-inline-block w-100">
+            <div class="position-absolute top-50 start-50 translate-middle rounded-circle" style="width: 340px; height: 340px; background: radial-gradient(circle, rgba(255,85,0,0.3) 0%, transparent 70%); filter: blur(40px); z-index: 0;"></div>
+            
+            <div class="hero-coach-frame">
+                <img src="~/images/hero-coach.jpg" alt="Master Athletics Coach" />
+                <div class="hero-coach-badge">
+                    <div class="text-start">
+                        <span class="fw-bold text-white font-display text-uppercase d-block" style="font-size: 1.05rem;">HEAD OF ATHLETICS</span>
+                        <small class="text-secondary font-mono" style="font-size: 0.75rem; color: #94A3B8 !important;">STRENGTH & CONDITIONING</small>
+                    </div>
+                    <span class="power-badge-primary" style="font-size: 0.75rem;">
+                        <i class="bi bi-patch-check-fill me-1"></i> MASTER
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ^ Marquee / Athletic Ticker Bar -->
+<div class="power-card p-3 my-5 overflow-hidden border-power-accent border-opacity-25" style="background: linear-gradient(90deg, #11131B 0%, #1A1D28 50%, #11131B 100%);">
+    <div class="d-flex py-1 text-white fw-bold align-items-center justify-content-center overflow-hidden text-nowrap font-display text-uppercase" style="letter-spacing: 2px; font-size: 1.15rem;">
+        <span>Olympic Lifting</span>
+        <i class="bi bi-fire text-power-accent mx-4 fs-5"></i>
+        <span class="text-power-accent">HIIT & Conditioning</span>
+        <i class="bi bi-fire text-power-accent mx-4 fs-5"></i>
+        <span>Personal Training</span>
+        <i class="bi bi-fire text-power-accent mx-4 fs-5"></i>
+        <span class="text-power-accent">Biometric Analytics</span>
+        <i class="bi bi-fire text-power-accent mx-4 fs-5"></i>
+        <span>Certified Master Coaches</span>
+    </div>
+</div>
+
+<main>
+    <!-- ^ About Section -->
+    <section class="my-5 py-4" id="about">
+        <div class="row g-5 align-items-center">
+            <div class="col-12 col-lg-6">
+                <div class="power-card p-2 position-relative overflow-hidden rounded-4">
+                    <img src="~/images/about-facility.jpg" alt="Elite Training Facility" class="img-fluid rounded-4 w-100" style="object-fit: cover; max-height: 440px;" />
+                    <div class="position-absolute bottom-0 start-0 m-4 px-3 py-2 rounded-pill power-glass text-white font-mono small d-inline-flex align-items-center gap-2 border border-secondary border-opacity-25">
+                        <span class="power-pip power-pip-success"></span>
+                        <span>OLYMPIC-GRADE FACILITY &bull; CAIRO</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <i class="bi bi-trophy-fill text-power-accent fs-5"></i>
+                    <span class="text-power-accent font-display text-uppercase fw-bold" style="letter-spacing: 1px;">THE STANDARD</span>
+                </div>
+
+                <h2 class="display-5 fw-bold text-white mb-3 font-display text-uppercase">
+                    EMPOWERING YOU TO ACHIEVE <br />
+                    <span class="text-power-accent">UNCOMPROMISING</span> PEAK FITNESS
+                </h2>
+
+                <p class="text-secondary mb-4" style="line-height: 1.7; color: #CBD5E1 !important;">
+                    We believe training is more than lifting weights—it is a relentless standard of discipline and performance. With precision biomechanics equipment, Olympic barbells, and certified trainers, we build athletic power.
                 </p>
+
+                <div class="row g-3">
+                    <div class="col-12 col-sm-6">
+                        <div class="p-3 power-card h-100">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <i class="bi bi-award-fill text-power-accent fs-4"></i>
+                                <h3 class="fw-bold fs-6 mb-0 text-white font-display text-uppercase">Certified Coaches</h3>
+                            </div>
+                            <p class="text-secondary small mb-0" style="color: #94A3B8 !important;">Guidance from certified strength & conditioning specialists.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6">
+                        <div class="p-3 power-card h-100">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <i class="bi bi-shield-check text-power-accent fs-4"></i>
+                                <h3 class="fw-bold fs-6 mb-0 text-white font-display text-uppercase">Olympic Equipment</h3>
+                            </div>
+                            <p class="text-secondary small mb-0" style="color: #94A3B8 !important;">Calibrated plates, competition benches, and precision turf.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6">
+                        <div class="p-3 power-card h-100">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <i class="bi bi-calendar-check-fill text-power-accent fs-4"></i>
+                                <h3 class="fw-bold fs-6 mb-0 text-white font-display text-uppercase">Flexible Classes</h3>
+                            </div>
+                            <p class="text-secondary small mb-0" style="color: #94A3B8 !important;">Live schedule with real-time capacity and instant booking.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6">
+                        <div class="p-3 power-card h-100">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <i class="bi bi-heart-pulse-fill text-danger fs-4"></i>
+                                <h3 class="fw-bold fs-6 mb-0 text-white font-display text-uppercase">Biometric Records</h3>
+                            </div>
+                            <p class="text-secondary small mb-0" style="color: #94A3B8 !important;">Integrated member health data and milestone monitoring.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <a asp-controller="Plans" asp-action="Index" class="btn btn-power-primary px-4">
+                        Join Power Fitness
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ^ Workouts Showcase Section with 16:9 Aspect Ratio Cards -->
+    <section class="my-5 py-5" id="workouts">
+        <div class="text-center mb-5">
+            <div class="d-inline-flex align-items-center gap-2 mb-2">
+                <i class="bi bi-lightning-charge-fill text-power-accent fs-5"></i>
+                <span class="text-power-accent font-display text-uppercase fw-bold" style="letter-spacing: 1px;">DYNAMIC DISCIPLINES</span>
+            </div>
+            <h2 class="display-5 fw-bold text-white font-display text-uppercase">
+                UPCOMING ATHLETIC WORKOUTS
+            </h2>
+            <p class="text-secondary" style="color: #CBD5E1 !important;">Transform your body with coached high-intensity group sessions.</p>
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            <!-- Workout 1: Functional Strength -->
+            <div class="col">
+                <div class="power-card power-card-interactive h-100 overflow-hidden d-flex flex-column">
+                    <div class="power-card-media">
+                        <img src="~/images/workout-strength.jpg" alt="Functional Strength" />
+                    </div>
+                    <div class="p-4 d-flex flex-column flex-grow-1">
+                        <span class="badge power-badge-active mb-2 align-self-start font-mono text-uppercase" style="font-size: 0.7rem;">FUNCTIONAL</span>
+                        <h4 class="fw-bold text-white font-display text-uppercase mb-2">FUNCTIONAL STRENGTH</h4>
+                        <p class="text-secondary small mb-4 flex-grow-1" style="color: #CBD5E1 !important;">Compound multi-joint lifts paired with athletic mobility drills to build everyday resilience.</p>
+                        <a asp-controller="Booking" asp-action="Index" class="btn btn-power-outline btn-sm w-100 justify-content-between text-white">
+                            <span>Book Session</span>
+                            <i class="bi bi-arrow-right text-power-accent"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
 
-            <!-- ^ all other sections -->
-            <main>
-                <!-- ^ about section -->
-                <section class="about my-5 text-black-alternative" id="about">
-                    <div class="container">
-                        <div class="row g-5 align-items-center justify-content-center">
-                            <div class="col-12 col-lg-6">
-                                <div class="characters position-relative text-center">
-                                    <div class="image">
-                                        <img class="img-fluid rounded-4 shadow-sm" src="~/images/about p1.jpg" alt="Gym training" />
-                                    </div>
-
-                                    <div class="image position-absolute d-none d-lg-block">
-                                        <img class="rounded-4 shadow" src="~/images/about p2.jpg" alt="Workout athlete" />
-                                    </div>
-
-                                    <div class="image position-absolute d-none d-lg-block">
-                                        <img class="rounded-4 shadow" src="~/images/about p3.jpg" alt="Fitness lifestyle" />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-lg-6">
-                                <div class="title d-flex justify-content-start align-items-center gap-2 mb-2">
-                                    <img src="~/images/dumbbell.jpg" alt="dumbbell icon" style="width: 28px; height: 28px;" />
-                                    <h2 class="text-primary-color fs-5 fw-bold mb-0">About Us</h2>
-                                </div>
-
-                                <header>
-                                    <p class="fw-bolder display-6 mb-3">
-                                        EMPOWERING YOU TO ACHIEVE
-                                        <span class="text-primary-color">YOUR FITNESS</span> GOALS
-                                    </p>
-                                    <p class="text text-muted mb-4">
-                                        We believe fitness is more than just a workout—it's a
-                                        lifestyle. With top-of-the-line facilities, certified
-                                        trainers, and a supportive community, we're here to inspire
-                                        and guide you every step of the way.
-                                    </p>
-                                </header>
-
-                                <div class="features">
-                                    <div class="row row-cols-1 row-cols-sm-2 gx-3 gy-4">
-                                        <div class="feature">
-                                            <div class="inner">
-                                                <div class="title d-flex align-items-center gap-2 mb-2">
-                                                    <img src="~/images/feature icon.jpg" alt="icon" style="width: 32px;" />
-                                                    <h3 class="fw-bold fs-6 mb-0">Certified Trainers</h3>
-                                                </div>
-                                                <div class="info">
-                                                    <p class="text-muted small mb-0">Guidance from certified and passionate fitness coaches.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="feature">
-                                            <div class="inner">
-                                                <div class="title d-flex align-items-center gap-2 mb-2">
-                                                    <img src="~/images/feature icon.jpg" alt="icon" style="width: 32px;" />
-                                                    <h3 class="fw-bold fs-6 mb-0">Modern Equipment</h3>
-                                                </div>
-                                                <div class="info">
-                                                    <p class="text-muted small mb-0">Top-tier cardio machines and heavy lifting stations.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="feature">
-                                            <div class="inner">
-                                                <div class="title d-flex align-items-center gap-2 mb-2">
-                                                    <img src="~/images/feature icon.jpg" alt="icon" style="width: 32px;" />
-                                                    <h3 class="fw-bold fs-6 mb-0">Flexible Schedules</h3>
-                                                </div>
-                                                <div class="info">
-                                                    <p class="text-muted small mb-0">Open morning to evening with convenient booking slots.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="feature">
-                                            <div class="inner">
-                                                <div class="title d-flex align-items-center gap-2 mb-2">
-                                                    <img src="~/images/feature icon.jpg" alt="icon" style="width: 32px;" />
-                                                    <h3 class="fw-bold fs-6 mb-0">Custom Diet Plans</h3>
-                                                </div>
-                                                <div class="info">
-                                                    <p class="text-muted small mb-0">Nutritional advice personalized to fit your transformation.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <a asp-controller="Plans" asp-action="Index" class="btn bg-primary-color rounded-pill text-white fw-medium px-4 py-2 mt-4 d-inline-block text-decoration-none shadow-sm">
-                                        Get Started
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+            <!-- Workout 2: Cardio & HIIT -->
+            <div class="col">
+                <div class="power-card power-card-interactive h-100 overflow-hidden d-flex flex-column">
+                    <div class="power-card-media">
+                        <img src="~/images/workout-hiit.jpg" alt="Cardio & HIIT Burn" />
                     </div>
-                </section>
-
-                <!-- ^ workout section -->
-                <section class="workout my-5 py-5" id="workouts">
-                    <div class="container">
-                        <div class="title mx-auto text-center mb-5">
-                            <h2 class="text-white text-uppercase">WORKOUTS</h2>
-                            <p class="text-white fw-bolder fs-2 mb-4">
-                                Transform Your Body with Our Dynamic Upcoming Workouts
-                            </p>
-                        </div>
-
-                        <div class="row row-cols-md-3 row-cols-1 gy-4 gx-2 gx-md-4">
-                            <div class="col">
-                                <div class="card h-100 shadow-sm border-0 overflow-hidden">
-                                    <img src="~/images/workout 1.jpg" class="card-img-top" alt="Group Workout" />
-                                    <footer class="card-footer bg-white border-0 py-3 d-flex justify-content-between align-items-center">
-                                        <h5 class="card-title text-black-alternative text-uppercase fw-bolder mb-0 fs-6">
-                                            Group Workout
-                                        </h5>
-                                        <a asp-controller="Session" asp-action="Index" class="text-primary-color fw-bold text-decoration-none">Explore &rarr;</a>
-                                    </footer>
-                                </div>
-                            </div>
-
-                            <div class="col">
-                                <div class="card h-100 shadow-sm border-0 overflow-hidden">
-                                    <img src="~/images/workout 2.jpg" class="card-img-top" alt="Cardio & HIIT" />
-                                    <footer class="card-footer bg-white border-0 py-3 d-flex justify-content-between align-items-center">
-                                        <h5 class="card-title text-black-alternative text-uppercase fw-bolder mb-0 fs-6">
-                                            Cardio & HIIT
-                                        </h5>
-                                        <a asp-controller="Session" asp-action="Index" class="text-primary-color fw-bold text-decoration-none">Explore &rarr;</a>
-                                    </footer>
-                                </div>
-                            </div>
-
-                            <div class="col">
-                                <div class="card h-100 shadow-sm border-0 overflow-hidden">
-                                    <img src="~/images/workout 3.jpg" class="card-img-top" alt="Strength & Conditioning" />
-                                    <footer class="card-footer bg-white border-0 py-3 d-flex justify-content-between align-items-center">
-                                        <h5 class="card-title text-black-alternative text-uppercase fw-bolder mb-0 fs-6">
-                                            Strength & Conditioning
-                                        </h5>
-                                        <a asp-controller="Session" asp-action="Index" class="text-primary-color fw-bold text-decoration-none">Explore &rarr;</a>
-                                    </footer>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="indicators d-flex justify-content-center align-items-center gap-2 mt-4">
-                            <div class="indicator"></div>
-                            <div class="indicator active"></div>
-                            <div class="indicator"></div>
-                            <div class="indicator"></div>
-                        </div>
+                    <div class="p-4 d-flex flex-column flex-grow-1">
+                        <span class="badge power-badge-upcoming mb-2 align-self-start font-mono text-uppercase" style="font-size: 0.7rem;">CONDITIONING</span>
+                        <h4 class="fw-bold text-white font-display text-uppercase mb-2">CARDIO & HIIT BURN</h4>
+                        <p class="text-secondary small mb-4 flex-grow-1" style="color: #CBD5E1 !important;">High-output interval training engineered to elevate VO2 max and accelerate calorie expenditure.</p>
+                        <a asp-controller="Booking" asp-action="Index" class="btn btn-power-outline btn-sm w-100 justify-content-between text-white">
+                            <span>Book Session</span>
+                            <i class="bi bi-arrow-right text-power-accent"></i>
+                        </a>
                     </div>
-                </section>
+                </div>
+            </div>
 
-                <!-- ^ why-us section -->
-                <section class="why-us my-5">
-                    <div class="container">
-                        <div class="row row-cols-1 row-cols-lg-2 align-items-center">
-                            <div class="info">
-                                <div>
-                                    <div class="title d-flex justify-content-start align-items-center gap-2 mb-2">
-                                        <img src="~/images/dumbbell.jpg" alt="dumbbell icon" style="width: 28px; height: 28px;" />
-                                        <h2 class="text-primary-color fs-5 fw-bold mb-0">Why Us</h2>
-                                    </div>
-
-                                    <header>
-                                        <p class="fw-bolder display-5 mb-4">
-                                            Elevate fitness with<br />
-                                            <span class="text-primary-color">the best</span> way possible
-                                        </p>
-                                        <p class="text text-muted">
-                                            We believe fitness is more than just a workout—it's a
-                                            lifestyle. With top-of-the-line facilities, certified
-                                            trainers, and a supportive community, we're here to inspire
-                                            and guide you every step of the way.
-                                        </p>
-                                    </header>
-
-                                    <ul class="features list-unstyled mt-4">
-                                        <li class="feature d-flex gap-4 align-items-center mb-4">
-                                            <div class="count">01</div>
-                                            <div class="text">
-                                                <h3 class="text-capitalize fw-bold fs-5">
-                                                    Personalized Fitness Plans
-                                                </h3>
-                                                <p class="fs-18 text-muted mb-0">
-                                                    We tailor every workout to fit your unique goals and
-                                                    fitness level ensuring that you make the most progress.
-                                                </p>
-                                            </div>
-                                        </li>
-
-                                        <li class="feature d-flex gap-4 align-items-center mb-4">
-                                            <div class="count">02</div>
-                                            <div class="text">
-                                                <h3 class="text-capitalize fw-bold fs-5">
-                                                    Modern Equipment & Facilities
-                                                </h3>
-                                                <p class="fs-18 text-muted mb-0">
-                                                    Train in a state-of-the-art environment with top-grade
-                                                    machines, dedicated zones, and clean amenities.
-                                                </p>
-                                            </div>
-                                        </li>
-
-                                        <li class="feature d-flex gap-4 align-items-center">
-                                            <div class="count">03</div>
-                                            <div class="text">
-                                                <h3 class="text-capitalize fw-bold fs-5">
-                                                    Supportive Community & Tracking
-                                                </h3>
-                                                <p class="fs-18 text-muted mb-0">
-                                                    Track your transformation milestones while staying motivated
-                                                    with a welcoming community of trainers and members.
-                                                </p>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="characters d-none d-lg-block text-center">
-                                <div class="images">
-                                    <img class="img-fluid" src="~/images/why us images.svg" alt="Why Us Illustration" />
-                                </div>
-                            </div>
-                        </div>
+            <!-- Workout 3: Hypertrophy & Powerlifting -->
+            <div class="col">
+                <div class="power-card power-card-interactive h-100 overflow-hidden d-flex flex-column">
+                    <div class="power-card-media">
+                        <img src="~/images/workout-hypertrophy.jpg" alt="Strength & Hypertrophy" />
                     </div>
-                </section>
-            </main>
+                    <div class="p-4 d-flex flex-column flex-grow-1">
+                        <span class="badge power-badge-danger mb-2 align-self-start font-mono text-uppercase" style="font-size: 0.7rem;">HYPERTROPHY</span>
+                        <h4 class="fw-bold text-white font-display text-uppercase mb-2">STRENGTH & HYPERTROPHY</h4>
+                        <p class="text-secondary small mb-4 flex-grow-1" style="color: #CBD5E1 !important;">Heavy barbell training, progressive overload programming, and muscle endurance mastery.</p>
+                        <a asp-controller="Booking" asp-action="Index" class="btn btn-power-outline btn-sm w-100 justify-content-between text-white">
+                            <span>Book Session</span>
+                            <i class="bi bi-arrow-right text-power-accent"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-            <!-- ^ Footer -->
-            <footer class="mt-5">
-                <div class="bar bg-primary-color d-flex py-3 text-white fw-bolder align-items-center rounded-3 my-4 overflow-hidden shadow-sm">
-                    <p class="py-0 my-0 overflow-hidden text-nowrap w-100 text-center fs-5 text-uppercase">
-                        outdoor & online trainers
-                        <img src="~/images/star.svg" alt="star icon" class="mx-3" /> personal training
-                        <img src="~/images/star.svg" alt="star icon" class="mx-3" /> live classes
-                        <img src="~/images/star.svg" alt="star icon" class="mx-3" /> certified coaches
-                        <img src="~/images/star.svg" alt="star icon" class="mx-3" /> strength & fitness
-                    </p>
+    <!-- ^ The Power Advantage Section -->
+    <section class="my-5 py-4">
+        <div class="row align-items-center g-5">
+            <div class="col-12 col-lg-6">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <i class="bi bi-shield-check text-power-accent fs-5"></i>
+                    <span class="text-power-accent font-display text-uppercase fw-bold" style="letter-spacing: 1px;">THE POWER ADVANTAGE</span>
                 </div>
 
-                <div class="footer-content my-5">
-                    <div class="container">
-                        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
-                            <div class="col logo">
-                                <div class="inner">
-                                    <div class="image mb-3">
-                                        <img src="~/images/logo.jpg" alt="Power Fitness Logo" class="img-fluid" style="max-height: 48px;" />
-                                    </div>
-                                    <p class="fs-18 text-muted">
-                                        Push harder, go further. Your fitness journey starts today!
-                                    </p>
-                                </div>
-                            </div>
+                <h2 class="display-5 fw-bold text-white mb-4 font-display text-uppercase">
+                    ELEVATE FITNESS WITH <br />
+                    <span class="text-power-accent">UNCOMPROMISING</span> PRECISION
+                </h2>
 
-                            <div class="col contact">
-                                <h4 class="fw-bolder text-uppercase mb-4 fs-6">Contact Us</h4>
-                                <ul class="list-unstyled p-0">
-                                    <li class="d-flex align-items-center gap-2 mb-2">
-                                        <div class="icon">
-                                            <img src="~/images/phone icon.jpg" alt="phone icon" style="width: 20px;" />
-                                        </div>
-                                        <span class="text-muted">+20 123 456 7890</span>
-                                    </li>
-                                    <li class="d-flex align-items-center gap-2">
-                                        <div class="icon">
-                                            <img src="~/images/message icon.jpg" alt="message icon" style="width: 20px;" />
-                                        </div>
-                                        <span class="text-muted">info@powerfitness.com</span>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <div class="col time">
-                                <h4 class="fw-bolder text-uppercase mb-4 fs-6">Gym Timing</h4>
-                                <p class="text-muted">
-                                    Mon - Fri : 08:00 AM - 10:00 PM <br />
-                                    Sat - Sun : 08:00 AM - 09:00 PM
-                                </p>
-                            </div>
-
-                            <div class="col location">
-                                <h4 class="fw-bolder text-uppercase mb-4 fs-6">Our Location</h4>
-                                <p class="text-muted">
-                                    2715 Ash Dr. San Jose, <br />
-                                    South Dakota 83475
-                                </p>
-                            </div>
+                <div class="d-flex flex-column gap-4">
+                    <div class="d-flex gap-3 align-items-start">
+                        <div class="power-card p-2 rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center text-power-accent font-mono fw-bold" style="width: 44px; height: 44px; border-color: rgba(255,85,0,0.4);">
+                            01
                         </div>
+                        <div>
+                            <h4 class="text-white fw-bold fs-5 mb-1 font-display text-uppercase">Tailored Athletic Programming</h4>
+                            <p class="text-secondary small mb-0" style="color: #CBD5E1 !important;">Personalized workout regiments and progress benchmarking designed for measurable strength gains.</p>
+                        </div>
+                    </div>
 
-                        <div class="text-center border-top pt-4 mt-4 text-muted small">
-                            &copy; @DateTime.Now.Year Power Fitness. All rights reserved.
+                    <div class="d-flex gap-3 align-items-start">
+                        <div class="power-card p-2 rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center text-power-accent font-mono fw-bold" style="width: 44px; height: 44px; border-color: rgba(255,85,0,0.4);">
+                            02
+                        </div>
+                        <div>
+                            <h4 class="text-white fw-bold fs-5 mb-1 font-display text-uppercase">Live Slot Capacity Control</h4>
+                            <p class="text-secondary small mb-0" style="color: #CBD5E1 !important;">No overcrowded workout spaces. Transparent capacity caps protect athlete coaching quality.</p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-3 align-items-start">
+                        <div class="power-card p-2 rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center text-power-accent font-mono fw-bold" style="width: 44px; height: 44px; border-color: rgba(255,85,0,0.4);">
+                            03
+                        </div>
+                        <div>
+                            <h4 class="text-white fw-bold fs-5 mb-1 font-display text-uppercase">Medical & Biometric Harmony</h4>
+                            <p class="text-secondary small mb-0" style="color: #CBD5E1 !important;">Certified health record integration safeguards training intensity according to personal physiology.</p>
                         </div>
                     </div>
                 </div>
-            </footer>
+            </div>
+
+            <div class="col-12 col-lg-6 text-center">
+                <div class="power-card p-2 overflow-hidden rounded-4">
+                    <img src="~/images/about-facility.jpg" alt="Power Fitness Advantage" class="img-fluid rounded-4" style="max-height: 400px; width: 100%; object-fit: cover;" />
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- ^ Footer -->
+<footer class="mt-5 pt-5 border-top border-secondary border-opacity-25">
+    <div class="row g-4 mb-5">
+        <div class="col-12 col-md-4">
+            <div class="d-flex align-items-center gap-2 mb-3">
+                <div class="d-flex align-items-center justify-content-center rounded-circle bg-power-accent text-white" style="width: 32px; height: 32px; box-shadow: 0 0 12px var(--accent-glow);">
+                    <i class="bi bi-fire fs-6 text-white"></i>
+                </div>
+                <span class="font-display fw-bold text-white text-uppercase tracking-wider fs-5 mb-0">POWER<span class="text-power-accent">FITNESS</span></span>
+            </div>
+            <p class="text-secondary small mb-3" style="max-width: 320px; color: #CBD5E1 !important;">
+                Elite strength conditioning, high-performance coaching, and comprehensive gym management.
+            </p>
+            <div class="d-flex gap-2 text-secondary small font-mono">
+                <span class="power-pip power-pip-success"></span> <span style="color: #CBD5E1 !important;">All Systems Operational</span>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-md-4">
+            <h5 class="text-white font-display text-uppercase mb-3">Facility Location & Hours</h5>
+            <div class="d-flex align-items-center gap-2 text-secondary small mb-2" style="color: #CBD5E1 !important;">
+                <i class="bi bi-geo-alt-fill text-power-accent"></i>
+                <span>2715 Olympic Blvd, Heliopolis, Cairo</span>
+            </div>
+            <div class="d-flex align-items-center gap-2 text-secondary small mb-2" style="color: #CBD5E1 !important;">
+                <i class="bi bi-clock-fill text-power-accent"></i>
+                <span>Mon – Fri: 06:00 AM – 11:00 PM</span>
+            </div>
+            <div class="d-flex align-items-center gap-2 text-secondary small" style="color: #CBD5E1 !important;">
+                <i class="bi bi-clock-fill text-power-accent"></i>
+                <span>Sat – Sun: 07:00 AM – 10:00 PM</span>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-md-4">
+            <h5 class="text-white font-display text-uppercase mb-3">Contact Desk</h5>
+            <div class="d-flex align-items-center gap-2 text-secondary small mb-2" style="color: #CBD5E1 !important;">
+                <i class="bi bi-telephone-fill text-power-accent"></i>
+                <span>+20 100 888 9999</span>
+            </div>
+            <div class="d-flex align-items-center gap-2 text-secondary small mb-3" style="color: #CBD5E1 !important;">
+                <i class="bi bi-envelope-fill text-power-accent"></i>
+                <span>desk@powerfitness.com</span>
+            </div>
+            <a asp-action="Login" asp-controller="Account" class="btn btn-power-outline btn-sm px-3 text-white">
+                <i class="bi bi-lock-fill me-1 text-power-accent"></i> Staff Portal
+            </a>
+        </div>
+    </div>
+
+    <div class="text-center text-muted small py-3 border-top border-secondary border-opacity-10" style="color: #94A3B8 !important;">
+        &copy; @DateTime.Now.Year POWER FITNESS &bull; ALL RIGHTS RESERVED
+    </div>
+</footer>

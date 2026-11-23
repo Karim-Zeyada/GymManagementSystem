@@ -1,0 +1,128 @@
+@model IEnumerable<MembershipViewModel>
+
+@{
+    ViewData["Title"] = "Subscriptions Directory";
+    var currentFilter = ViewBag.CurrentFilter as string ?? "all";
+}
+
+<div class="container-fluid py-4">
+    <header class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div>
+            <div class="d-flex align-items-center gap-2 mb-2">
+                <i class="bi bi-card-checklist text-power-accent fs-4"></i>
+                <span class="text-power-accent font-display text-uppercase fw-bold" style="letter-spacing: 1px;">MEMBER CONTRACTS</span>
+            </div>
+            <h1 class="display-5 text-white mb-0 fw-bold font-display text-uppercase">SUBSCRIPTIONS DIRECTORY</h1>
+            <p class="text-secondary" style="color: #CBD5E1 !important;">Track active athlete memberships, expiration dates, and package renewals</p>
+        </div>
+        <div>
+            <a asp-action="Create" class="btn btn-power-primary px-4 shadow-sm">
+                <i class="bi bi-person-plus-fill me-2 fs-6"></i>
+                Assign Membership
+            </a>
+        </div>
+    </header>
+
+    <!-- Filter Pills -->
+    <div class="mb-4">
+        <div class="btn-group p-1 rounded-pill bg-black bg-opacity-40 border border-secondary border-opacity-25" role="group">
+            <a asp-action="Index" asp-route-status="all" class="btn btn-sm px-3 rounded-pill font-mono @(currentFilter == "all" ? "btn-power-primary text-white" : "text-white")" style="color: @(currentFilter == "all" ? "#fff" : "#CBD5E1") !important;">
+                ALL (@(Model?.Count() ?? 0))
+            </a>
+            <a asp-action="Index" asp-route-status="active" class="btn btn-sm px-3 rounded-pill font-mono @(currentFilter == "active" ? "btn-power-primary text-white" : "text-white")" style="color: @(currentFilter == "active" ? "#fff" : "#CBD5E1") !important;">
+                <span class="power-pip power-pip-success me-1"></span>ACTIVE
+            </a>
+            <a asp-action="Index" asp-route-status="upcoming" class="btn btn-sm px-3 rounded-pill font-mono @(currentFilter == "upcoming" ? "btn-power-primary text-white" : "text-white")" style="color: @(currentFilter == "upcoming" ? "#fff" : "#CBD5E1") !important;">
+                <span class="power-pip power-pip-info me-1"></span>UPCOMING
+            </a>
+            <a asp-action="Index" asp-route-status="expired" class="btn btn-sm px-3 rounded-pill font-mono @(currentFilter == "expired" ? "btn-power-primary text-white" : "text-white")" style="color: @(currentFilter == "expired" ? "#fff" : "#CBD5E1") !important;">
+                <span class="power-pip power-pip-expired me-1"></span>EXPIRED
+            </a>
+        </div>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="power-table-wrapper">
+            <div class="table-responsive">
+                <table class="power-table">
+                    <thead>
+                        <tr>
+                            <th class="ps-4">Athlete</th>
+                            <th>Contact</th>
+                            <th>Gym Package</th>
+                            <th>Contract Fee</th>
+                            <th>Timeline</th>
+                            <th>Status</th>
+                            <th class="text-end pe-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            var badgeClass = item.Status == "Active" ? "power-badge-active" : item.Status == "Upcoming" ? "power-badge-upcoming" : "power-badge-expired";
+                            var pipClass = item.Status == "Active" ? "power-pip-success" : item.Status == "Upcoming" ? "power-pip-info" : "power-pip-expired";
+
+                            <tr>
+                                <td class="ps-4">
+                                    <div class="fw-bold text-white font-display text-uppercase">@item.MemberName</div>
+                                    <span class="text-muted small font-mono" style="color: #94A3B8 !important;">ID #@item.MemberId</span>
+                                </td>
+                                <td>
+                                    <div class="small font-mono text-white">@item.MemberEmail</div>
+                                    <div class="small font-mono" style="color: #CBD5E1 !important;">@item.MemberPhone</div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-black bg-opacity-40 border border-secondary border-opacity-25 text-white font-mono px-3 py-2">
+                                        @item.PlanName
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="fw-bold text-power-accent font-mono fs-6">$@item.PlanPrice.ToString("N2")</span>
+                                </td>
+                                <td>
+                                    <div class="small text-white font-mono">@item.StartDate.ToString("MMM dd, yyyy")</div>
+                                    <div class="small font-mono" style="color: #94A3B8 !important;">&rarr; @item.EndDate.ToString("MMM dd, yyyy")</div>
+                                </td>
+                                <td>
+                                    <span class="badge @badgeClass font-mono" style="font-size: 0.75rem;">
+                                        <span class="power-pip @pipClass"></span>
+                                        @item.Status.ToUpper()
+                                    </span>
+                                </td>
+                                <td class="text-end pe-4">
+                                    <div class="d-inline-flex gap-2">
+                                        <a asp-controller="Member" asp-action="Details" asp-route-id="@item.MemberId" class="btn-action-view" title="Member Profile">
+                                            <i class="bi bi-eye-fill"></i>
+                                        </a>
+                                        @if (item.Status == "Active" || item.Status == "Upcoming")
+                                        {
+                                            <form asp-action="Cancel" asp-route-id="@item.Id" method="post" class="d-inline m-0" onsubmit="return confirm('Cancel this active membership contract?');">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn-action-delete" title="Cancel Subscription">
+                                                    <i class="bi bi-x-circle-fill"></i>
+                                                </button>
+                                            </form>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="power-card text-center py-5 my-4">
+            <i class="bi bi-credit-card-2-front text-secondary display-4 opacity-50 mb-3 d-block"></i>
+            <h4 class="text-white font-display text-uppercase">No Subscriptions Found</h4>
+            <p class="text-secondary small" style="color: #CBD5E1 !important;">No member records match the selected status filter.</p>
+            <a asp-action="Create" class="btn btn-power-primary mt-2">
+                <i class="bi bi-person-plus-fill me-2 fs-6"></i>
+                Assign First Membership
+            </a>
+        </div>
+    }
+</div>

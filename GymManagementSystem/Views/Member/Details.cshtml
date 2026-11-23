@@ -1,107 +1,146 @@
 @model MemberDetailsViewModel
 
-<div class="container mt-5 mb-5">
+@{
+    ViewData["Title"] = $"{Model.Name} - Athlete Profile";
+}
+
+<div class="container py-4">
     <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card shadow-sm border-0 rounded-3 overflow-hidden">
-                <div class="card-header bg-primary-color text-white p-4">
-                    <div class="d-flex align-items-center">
+        <div class="col-12 col-lg-9">
+            <div class="power-card overflow-hidden">
+                <!-- Athlete Profile Header -->
+                <div class="p-4 p-md-5 border-bottom border-subtle" style="background: linear-gradient(180deg, rgba(255, 85, 0, 0.08) 0%, rgba(20, 23, 31, 0.6) 100%);">
+                    <div class="d-flex flex-column flex-sm-row align-items-center gap-4 text-center text-sm-start">
                         @if (!string.IsNullOrEmpty(Model.Photo))
                         {
                             var photoSrc = Model.Photo.StartsWith("http") || Model.Photo.StartsWith("/") ? Model.Photo : Url.Content($"~/images/members/{Model.Photo}");
-                            <img src="@photoSrc" alt="@Model.Name" class="rounded-circle border border-2 border-white me-3" width="70" height="70" style="object-fit:cover;" />
+                            <img src="@photoSrc" alt="@Model.Name" class="power-avatar-lg" />
                         }
                         else
                         {
-                            <div class="rounded-circle bg-white text-primary-color d-flex align-items-center justify-content-center fw-bold me-3" style="width:70px; height:70px; font-size:1.8rem;">
+                            <div class="power-avatar-placeholder-lg">
                                 @Model.Name.FirstOrDefault()
                             </div>
                         }
-                        <div>
-                            <h3 class="mb-0 fw-bold">@Model.Name</h3>
-                            <div class="opacity-75">
-                                <i class="bi bi-envelope me-1"></i>@Model.Email &bull; <i class="bi bi-phone me-1"></i>@Model.Phone
+
+                        <div class="flex-grow-1">
+                            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-sm-start gap-2 mb-2">
+                                <h1 class="h2 mb-0 fw-bold font-display text-white text-uppercase">@Model.Name</h1>
+                                <span class="power-badge-primary">Athlete #@Model.Id</span>
+                            </div>
+
+                            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-sm-start gap-3 text-secondary small font-mono">
+                                <span class="d-inline-flex align-items-center gap-1 text-white">
+                                    <i class="bi bi-envelope-fill text-power-accent"></i>
+                                    @Model.Email
+                                </span>
+                                <span class="d-inline-flex align-items-center gap-1 text-white">
+                                    <i class="bi bi-telephone-fill text-power-accent"></i>
+                                    @Model.Phone
+                                </span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="card-body p-4">
-                    <h5 class="text-primary-color mb-3 pb-2 border-bottom">
-                        <i class="bi bi-person-lines-fill me-2"></i>Personal & Contact Details
+                <div class="p-4 p-md-5">
+                    <!-- Personal Details -->
+                    <h5 class="font-display fw-bold text-uppercase text-white mb-3 d-flex align-items-center gap-2">
+                        <i class="bi bi-person-badge-fill text-power-accent"></i>
+                        Personal Information
                     </h5>
 
                     <div class="row g-3 mb-4">
-                        <div class="col-md-6">
-                            <div class="p-3 bg-light rounded-3">
-                                <small class="text-muted d-block mb-1"><i class="bi bi-gender-ambiguous me-1"></i>Gender</small>
-                                <span class="fw-semibold">@Model.Gender</span>
+                        <div class="col-12 col-md-4">
+                            <div class="power-stat-box">
+                                <small class="text-secondary d-block mb-1 text-uppercase font-display" style="color: #94A3B8 !important;">Gender</small>
+                                <span class="fw-bold text-white fs-6">@Model.Gender</span>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="p-3 bg-light rounded-3">
-                                <small class="text-muted d-block mb-1"><i class="bi bi-cake2 me-1"></i>Date of Birth</small>
-                                <span class="fw-semibold">@Model.DateOfBirth.ToString("MMMM dd, yyyy")</span>
+                        <div class="col-12 col-md-4">
+                            <div class="power-stat-box">
+                                <small class="text-secondary d-block mb-1 text-uppercase font-display" style="color: #94A3B8 !important;">Date of Birth</small>
+                                <span class="fw-bold text-white fs-6 font-mono">@Model.DateOfBirth.ToString("MMM dd, yyyy")</span>
                             </div>
                         </div>
-                        <div class="col-12">
-                            <div class="p-3 bg-light rounded-3">
-                                <small class="text-muted d-block mb-1"><i class="bi bi-geo-alt me-1"></i>Address</small>
-                                <span class="fw-semibold">@Model.Address</span>
+                        <div class="col-12 col-md-4">
+                            <div class="power-stat-box">
+                                <small class="text-secondary d-block mb-1 text-uppercase font-display" style="color: #94A3B8 !important;">Residential Address</small>
+                                <span class="fw-bold text-white fs-6 d-inline-flex align-items-center gap-1">
+                                    <i class="bi bi-geo-alt-fill text-power-accent me-1"></i>
+                                    @Model.Address
+                                </span>
                             </div>
                         </div>
                     </div>
 
-                    <h5 class="text-primary-color mb-3 pb-2 border-bottom">
-                        <i class="bi bi-card-checklist me-2"></i>Membership & Subscription
-                    </h5>
+                    <!-- Membership & Subscription -->
+                    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 mb-3 pt-3 border-top border-subtle">
+                        <h5 class="font-display fw-bold text-uppercase text-white mb-0 d-flex align-items-center gap-2">
+                            <i class="bi bi-card-checklist text-power-accent"></i>
+                            Membership & Subscription
+                        </h5>
+                        <a asp-controller="MemberShip" asp-action="Create" asp-route-memberId="@Model.Id" class="btn-power-outline py-1 px-3 small text-white">
+                            <i class="bi bi-plus-lg me-1 text-power-accent"></i>
+                            Assign / Renew Plan
+                        </a>
+                    </div>
 
                     <div class="row g-3 mb-4">
-                        <div class="col-md-4">
-                            <div class="p-3 bg-light rounded-3">
-                                <small class="text-muted d-block mb-1"><i class="bi bi-award me-1"></i>Current Plan</small>
-                                <span class="fw-semibold text-primary-color">@(Model.PlanName ?? "No Active Plan")</span>
+                        <div class="col-12 col-md-4">
+                            <div class="power-stat-box border-power-accent">
+                                <small class="text-secondary d-block mb-1 text-uppercase font-display" style="color: #94A3B8 !important;">Active Tier</small>
+                                <span class="fw-bold text-power-accent fs-5 font-display text-uppercase">@(Model.PlanName ?? "No Active Plan")</span>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="p-3 bg-light rounded-3">
-                                <small class="text-muted d-block mb-1"><i class="bi bi-calendar-event me-1"></i>Start Date</small>
-                                <span class="fw-semibold">@(Model.MembershipStartDate?.ToString("yyyy-MM-dd") ?? "—")</span>
+                        <div class="col-12 col-md-4">
+                            <div class="power-stat-box">
+                                <small class="text-secondary d-block mb-1 text-uppercase font-display" style="color: #94A3B8 !important;">Contract Start</small>
+                                <span class="fw-bold text-white fs-6 font-mono">@(Model.MembershipStartDate?.ToString("yyyy-MM-dd") ?? "—")</span>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="p-3 bg-light rounded-3">
-                                <small class="text-muted d-block mb-1"><i class="bi bi-calendar-x me-1"></i>End Date</small>
-                                <span class="fw-semibold">@(Model.MembershipEndDate?.ToString("yyyy-MM-dd") ?? "—")</span>
+                        <div class="col-12 col-md-4">
+                            <div class="power-stat-box">
+                                <small class="text-secondary d-block mb-1 text-uppercase font-display" style="color: #94A3B8 !important;">Contract Expiry</small>
+                                <span class="fw-bold text-white fs-6 font-mono">@(Model.MembershipEndDate?.ToString("yyyy-MM-dd") ?? "—")</span>
                             </div>
                         </div>
                     </div>
 
+                    <!-- Health & Medical Details -->
                     @if (Model.HasHealthRecord)
                     {
-                        <div class="p-3 bg-light border border-primary-subtle rounded-3 d-flex justify-content-between align-items-center">
-                            <div>
-                                <i class="bi bi-heart-pulse-fill text-danger me-2 fs-4"></i>
-                                <strong class="text-dark">Health Record Attached</strong>
-                                <span class="text-muted ms-2 small">Physical metrics and medical record</span>
+                        <div class="power-card p-3 p-md-4 border-subtle d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3" style="background: rgba(239, 68, 68, 0.08); border-left: 4px solid var(--status-danger) !important;">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="p-2 rounded-circle bg-surface-2 border border-subtle">
+                                    <i class="bi bi-heart-pulse-fill text-danger fs-3"></i>
+                                </div>
+                                <div>
+                                    <strong class="text-white d-block">Biometric Health Record Attached</strong>
+                                    <span class="text-secondary small" style="color: #CBD5E1 !important;">Physical measurements, blood group, and medical restrictions recorded.</span>
+                                </div>
                             </div>
-                            <a asp-action="HealthRecord" asp-route-id="@Model.Id" class="btn btn-outline-primary btn-sm">
-                                <i class="bi bi-file-medical me-1"></i>View Health Record
+                            <a asp-action="HealthRecord" asp-route-id="@Model.Id" class="btn-power-outline py-2 px-3 small text-nowrap text-white">
+                                <i class="bi bi-eye-fill me-1 text-power-accent"></i>
+                                View Biometrics
                             </a>
                         </div>
                     }
                 </div>
 
-                <div class="card-footer bg-white border-top p-4 d-flex justify-content-between">
-                    <a asp-action="Index" class="btn btn-outline-secondary px-4">
-                        <i class="bi bi-arrow-left me-1"></i>Back to List
+                <!-- Footer Actions -->
+                <div class="p-4 bg-surface-2 border-top border-subtle d-flex flex-column flex-sm-row justify-content-between gap-3">
+                    <a asp-action="Index" class="btn-power-ghost text-white">
+                        <i class="bi bi-arrow-left me-1"></i> Back to Directory
                     </a>
                     <div class="d-flex gap-2">
-                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary-color text-white px-4">
-                            <i class="bi bi-pencil me-1"></i>Edit
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn-power-primary">
+                            <i class="bi bi-pencil-fill me-2"></i>
+                            Edit Athlete
                         </a>
-                        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger px-4">
-                            <i class="bi bi-trash me-1"></i>Delete
+                        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn-power-danger">
+                            <i class="bi bi-trash3-fill me-2"></i>
+                            Delete Athlete
                         </a>
                     </div>
                 </div>

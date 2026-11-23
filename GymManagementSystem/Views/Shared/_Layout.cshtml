@@ -3,39 +3,41 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="author" />
+    <meta name="author" content="Power Fitness" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+Thambi+2:wght@400..800&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Oswald:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Rubik:ital,wght@0,400..800;1,400..800&display=swap"
           rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
     <link rel="stylesheet" href="~/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="~/css/design-tokens.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/power-theme.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <title>Power fitness</title>
+    <title>@(ViewData["Title"] != null ? $"{ViewData["Title"]} | " : "")POWER FITNESS</title>
 </head>
-<body>
+<body class="bg-dark text-white">
     <partial name="_Header.cshtml" />
-    <div class="container">
-        <!-- TempData Flash Messages -->
+    <div class="container pb-5">
+        <!-- Modern Floating Dark Toast Flash Messages -->
         @if (TempData["SuccessMessage"] != null)
         {
-            <div class="alert alert-success alert-dismissible fade show my-3 shadow-sm d-flex align-items-center" role="alert">
-                <i class="bi bi-check-circle-fill fs-5 me-2"></i>
-                <div class="flex-grow-1">@TempData["SuccessMessage"]</div>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <div class="alert power-alert-success alert-dismissible fade show my-3 shadow-lg d-flex align-items-center gap-3 py-3 px-4" role="alert">
+                <i class="bi bi-check-circle-fill text-success fs-5 flex-shrink-0"></i>
+                <div class="flex-grow-1 fw-semibold text-white">@TempData["SuccessMessage"]</div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         }
         @if (TempData["ErrorMessage"] != null)
         {
-            <div class="alert alert-danger alert-dismissible fade show my-3 shadow-sm d-flex align-items-center" role="alert">
-                <i class="bi bi-exclamation-triangle-fill fs-5 me-2"></i>
-                <div class="flex-grow-1">@TempData["ErrorMessage"]</div>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <div class="alert power-alert-danger alert-dismissible fade show my-3 shadow-lg d-flex align-items-center gap-3 py-3 px-4" role="alert">
+                <i class="bi bi-exclamation-octagon-fill text-danger fs-5 flex-shrink-0"></i>
+                <div class="flex-grow-1 fw-semibold text-white">@TempData["ErrorMessage"]</div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         }
 
-        <main role="main" class="pb-3">
+        <main role="main" class="pb-4">
             @RenderBody()
         </main>
     </div>

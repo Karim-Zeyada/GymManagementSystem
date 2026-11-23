@@ -1,57 +1,108 @@
 @model HealthRecordDetailsViewModel
 
-<div class="container mt-5 mb-5">
+@{
+    ViewData["Title"] = $"Biometrics - {Model.MemberName}";
+
+    decimal heightInMeters = Model.Height / 100m;
+    decimal bmi = heightInMeters > 0 ? Math.Round(Model.Weight / (heightInMeters * heightInMeters), 1) : 0;
+    string bmiCategory = bmi switch
+    {
+        < 18.5m => "Underweight",
+        <= 24.9m => "Optimal Range",
+        <= 29.9m => "Overweight",
+        _ => "Obese Range"
+    };
+    string bmiBadgeClass = bmi switch
+    {
+        <= 24.9m and >= 18.5m => "power-badge-active",
+        < 18.5m => "power-badge-secondary",
+        _ => "power-badge-danger"
+    };
+}
+
+<div class="container py-4">
     <div class="row justify-content-center">
-        <div class="col-lg-8 col-xl-7">
-            <div class="card shadow-sm border-0 rounded-3 overflow-hidden">
-                <div class="card-header bg-danger text-white py-3">
-                    <h4 class="mb-0 fw-bold">
-                        <i class="bi bi-heart-pulse-fill me-2"></i>Health Record: @Model.MemberName
-                    </h4>
+        <div class="col-12 col-lg-8">
+            <div class="power-card overflow-hidden">
+                <!-- Header -->
+                <div class="p-4 p-md-5 border-bottom border-subtle" style="background: linear-gradient(180deg, rgba(239, 68, 68, 0.12) 0%, rgba(20, 23, 31, 0.6) 100%);">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="p-3 rounded-circle bg-surface-2 border border-subtle">
+                            <i class="bi bi-heart-pulse-fill text-danger fs-2"></i>
+                        </div>
+                        <div>
+                            <span class="power-badge-danger mb-1">Biometrics Profile</span>
+                            <h1 class="h2 mb-0 fw-bold font-display text-white text-uppercase">@Model.MemberName</h1>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body p-4">
-                    <div class="row g-4 mb-4">
-                        <div class="col-md-6">
-                            <div class="p-3 bg-light rounded-3 border-start border-4 border-primary">
-                                <small class="text-muted d-block mb-1">Height</small>
-                                <div class="display-6 fw-bold text-dark">@Model.Height <span class="fs-5 text-muted">cm</span></div>
+
+                <div class="p-4 p-md-5">
+                    <h5 class="font-display fw-bold text-uppercase text-white mb-3">Physical & Biometric Metrics</h5>
+
+                    <div class="row g-3 mb-4">
+                        <!-- Height -->
+                        <div class="col-12 col-sm-6">
+                            <div class="power-stat-box">
+                                <small class="text-secondary d-block mb-1 text-uppercase font-display" style="color: #94A3B8 !important;">Stature / Height</small>
+                                <div class="d-flex align-items-baseline gap-2">
+                                    <span class="font-mono text-white fw-bold display-6">@Model.Height</span>
+                                    <span class="text-secondary font-display fs-5" style="color: #CBD5E1 !important;">CM</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="p-3 bg-light rounded-3 border-start border-4 border-primary">
-                                <small class="text-muted d-block mb-1">Weight</small>
-                                <div class="display-6 fw-bold text-dark">@Model.Weight <span class="fs-5 text-muted">kg</span></div>
+
+                        <!-- Weight -->
+                        <div class="col-12 col-sm-6">
+                            <div class="power-stat-box">
+                                <small class="text-secondary d-block mb-1 text-uppercase font-display" style="color: #94A3B8 !important;">Mass / Weight</small>
+                                <div class="d-flex align-items-baseline gap-2">
+                                    <span class="font-mono text-white fw-bold display-6">@Model.Weight</span>
+                                    <span class="text-secondary font-display fs-5" style="color: #CBD5E1 !important;">KG</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="p-3 bg-light rounded-3 border-start border-4 border-danger">
-                                <small class="text-muted d-block mb-1">Blood Type</small>
-                                <div class="display-6 fw-bold text-danger">@Model.BloodType</div>
+
+                        <!-- Blood Type -->
+                        <div class="col-12 col-sm-6">
+                            <div class="power-stat-box">
+                                <small class="text-secondary d-block mb-1 text-uppercase font-display" style="color: #94A3B8 !important;">Blood Group</small>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="font-display fw-bold text-power-accent display-6">@Model.BloodType</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="p-3 bg-light rounded-3 border-start border-4 border-warning">
-                                <small class="text-muted d-block mb-1">BMI Estimate</small>
-                                @{
-                                    decimal heightInMeters = Model.Height / 100m;
-                                    decimal bmi = heightInMeters > 0 ? Math.Round(Model.Weight / (heightInMeters * heightInMeters), 1) : 0;
-                                }
-                                <div class="display-6 fw-bold text-dark">@bmi <span class="fs-5 text-muted">kg/m²</span></div>
+
+                        <!-- BMI Estimate -->
+                        <div class="col-12 col-sm-6">
+                            <div class="power-stat-box">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <small class="text-secondary text-uppercase font-display" style="color: #94A3B8 !important;">BMI Estimate</small>
+                                    <span class="@bmiBadgeClass">@bmiCategory</span>
+                                </div>
+                                <div class="d-flex align-items-baseline gap-2">
+                                    <span class="font-mono text-white fw-bold display-6">@bmi</span>
+                                    <span class="text-secondary font-mono small" style="color: #CBD5E1 !important;">kg/m²</span>
+                                </div>
                             </div>
                         </div>
+
+                        <!-- Notes & Restrictions -->
                         <div class="col-12">
-                            <div class="p-3 bg-light rounded-3">
-                                <small class="text-muted d-block mb-2 fw-semibold">
-                                    <i class="bi bi-sticky me-1"></i>Medical Conditions & Special Notes
-                                </small>
-                                <p class="mb-0 text-dark">@(string.IsNullOrWhiteSpace(Model.Note) ? "No medical conditions or notes recorded." : Model.Note)</p>
+                            <div class="power-stat-box">
+                                <small class="text-secondary d-block mb-2 text-uppercase font-display" style="color: #94A3B8 !important;">Medical Restrictions & Clinical Notes</small>
+                                <p class="mb-0 text-white font-mono small" style="color: #E2E8F0 !important;">
+                                    @(string.IsNullOrWhiteSpace(Model.Note) ? "No medical restrictions or allergies recorded for this athlete." : Model.Note)
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="card-footer bg-white border-top p-4 d-flex justify-content-between">
-                    <a asp-action="Details" asp-route-id="@Model.MemberId" class="btn btn-outline-secondary px-4">
-                        <i class="bi bi-arrow-left me-1"></i>Back to Member Profile
+
+                <!-- Footer -->
+                <div class="p-4 bg-surface-2 border-top border-subtle d-flex justify-content-between">
+                    <a asp-action="Details" asp-route-id="@Model.MemberId" class="btn-power-ghost text-white">
+                        <i class="bi bi-arrow-left me-1"></i> Back to Athlete Profile
                     </a>
                 </div>
             </div>

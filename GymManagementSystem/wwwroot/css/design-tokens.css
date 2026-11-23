@@ -1,0 +1,62 @@
+/* ==========================================================================
+   Power Fitness - CSS Design Tokens (Dark-First Athletic Luxury)
+   ========================================================================== */
+
+:root {
+    /* Canvas & Surfaces */
+    --bg-canvas: #08090D;
+    --bg-surface-1: #11131B;
+    --bg-surface-2: #181B26;
+    --bg-surface-3: #222634;
+    --bg-surface-input: #141620;
+    --bg-glass: rgba(17, 19, 27, 0.85);
+    --bg-glass-elevated: rgba(24, 27, 38, 0.92);
+
+    /* Electric Accent System */
+    --accent-primary: #FF5500;
+    --accent-hover: #FF6E24;
+    --accent-active: #E04B00;
+    --accent-subtle: rgba(255, 85, 0, 0.12);
+    --accent-glow: rgba(255, 85, 0, 0.28);
+    --accent-gradient: linear-gradient(135deg, #FF5500 0%, #FF3300 100%);
+    --accent-gradient-hover: linear-gradient(135deg, #FF6A1A 0%, #FF4400 100%);
+
+    /* Luminous Borders */
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-medium: rgba(255, 255, 255, 0.14);
+    --border-focus: #FF5500;
+    --border-glow: 0 0 0 3px rgba(255, 85, 0, 0.22);
+
+    /* Typography Colors - High Contrast Slate & Zinc */
+    --text-primary: #F8FAFC;
+    --text-secondary: #CBD5E1;
+    --text-muted: #94A3B8;
+    --text-inverse: #08090D;
+
+    /* Semantic Status */
+    --status-success: #10B981;
+    --status-success-bg: rgba(16, 185, 129, 0.12);
+    --status-warning: #F59E0B;
+    --status-warning-bg: rgba(245, 158, 11, 0.12);
+    --status-danger: #EF4444;
+    --status-danger-bg: rgba(239, 68, 68, 0.12);
+    --status-info: #06B6D4;
+    --status-info-bg: rgba(6, 182, 212, 0.12);
+
+    /* Typography Scale */
+    --font-display: 'Oswald', 'Rubik', sans-serif;
+    --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    /* Spatial & Radii */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --radius-pill: 9999px;
+
+    /* Elevation Shadows */
+    --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.45);
+    --shadow-elevated: 0 16px 36px rgba(0, 0, 0, 0.65);
+    --shadow-glow: 0 0 28px rgba(255, 85, 0, 0.25);
+}

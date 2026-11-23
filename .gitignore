@@ -361,3 +361,14 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# ==========================================
+# Agentic & Automation Artifacts
+# ==========================================
+.playwright-mcp/
+DESIGN.md
+*.design.md
+*.skill.md
+**/scratch/
+*.log
+.system_generated/

@@ -13,6 +13,7 @@ namespace GymManagementSystem.DAL.Data.Seeder
         {
             await PlanSeeder.SeedAsync(dbContext);
             await CatgorySeeder.SeedAsync(dbContext);
+            await GymDemoDataSeeder.SeedDemoDataAsync(dbContext);
 
             if (roleManager != null && userManager != null)
             {

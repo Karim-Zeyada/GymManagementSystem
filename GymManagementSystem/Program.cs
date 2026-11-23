@@ -1,15 +1,19 @@
 using GymManagementSystem.BLL.Mapping;
 using GymManagementSystem.BLL.Services.Analytics;
 using GymManagementSystem.BLL.Services.Attachments;
+using GymManagementSystem.BLL.Services.Bookings;
 using GymManagementSystem.BLL.Services.Members;
+using GymManagementSystem.BLL.Services.Memberships;
 using GymManagementSystem.BLL.Services.Plans;
 using GymManagementSystem.BLL.Services.Sessions;
 using GymManagementSystem.BLL.Services.Trainers;
 using GymManagementSystem.DAL.Data.Contexts;
 using GymManagementSystem.DAL.Data.Seeder;
 using GymManagementSystem.DAL.Models;
+using GymManagementSystem.DAL.Repositories.Bookings;
 using GymManagementSystem.DAL.Repositories.Generic;
 using GymManagementSystem.DAL.Repositories.Members;
+using GymManagementSystem.DAL.Repositories.Memberships;
 using GymManagementSystem.DAL.Repositories.Plans;
 using GymManagementSystem.DAL.Repositories.Sessions;
 using GymManagementSystem.DAL.Repositories.Trainers;
@@ -32,6 +36,8 @@ builder.Services.AddScoped<IPlanRepository, PlanRepository>();
 builder.Services.AddScoped<IMemberRepository, MemberRepository>();
 builder.Services.AddScoped<ITrainerRepository, TrainerRepository>();
 builder.Services.AddScoped<ISessionRepository, SessionRepository>();
+builder.Services.AddScoped<IMembershipRepository, MembershipRepository>();
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 
 // Unit of Work Registration
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -41,6 +47,8 @@ builder.Services.AddScoped<IPlanService, PlanService>();
 builder.Services.AddScoped<IMemberService, MemberService>();
 builder.Services.AddScoped<ITrainerService, TrainerService>();
 builder.Services.AddScoped<ISessionService, SessionService>();
+builder.Services.AddScoped<IMembershipService, MembershipService>();
+builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IAnalyticsService, AnalyticsService>();
 builder.Services.AddScoped<IAttachmentService, AttachmentService>();
 

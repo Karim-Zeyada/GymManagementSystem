@@ -1,3 +1,5 @@
+using GymManagementSystem.BLL.ViewModels.Bookings;
+
 namespace GymManagementSystem.BLL.ViewModels.Sessions;
 
 public class SessionDetailsViewModel
@@ -10,6 +12,8 @@ public class SessionDetailsViewModel
     public int BookedSlots { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
+
+    public IEnumerable<BookingViewModel> EnrolledMembers { get; set; } = new List<BookingViewModel>();
 
     public string TimeString => $"{StartDate:hh:mm tt} – {EndDate:hh:mm tt}";
 
