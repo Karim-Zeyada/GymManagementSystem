@@ -1,4 +1,5 @@
 using AutoMapper;
+using GymManagementSystem.BLL.Common;
 using GymManagementSystem.BLL.ViewModels.Members;
 using GymManagementSystem.DAL.Models;
 using GymManagementSystem.DAL.Models.ValueObjects;
@@ -81,7 +82,7 @@ public class MemberService : IMemberService
 
     public async Task<DeleteMemberViewModel?> GetMemberForDeleteAsync(int id)
     {
-        var member = await _unitOfWork.Members.GetWithDetailsAsync(id);
+        var member = await _unitOfWork.Members.GetByIdAsync(id);
         if (member == null) return null;
 
         return new DeleteMemberViewModel
@@ -93,18 +94,18 @@ public class MemberService : IMemberService
         };
     }
 
-    public async Task<(bool Success, string? ErrorMessage)> CreateMemberAsync(CreateMemberViewModel model)
+    public async Task<Result> CreateMemberAsync(CreateMemberViewModel model)
     {
         // 1. Email uniqueness check
         if (await _unitOfWork.Members.IsEmailExistsAsync(model.Email))
         {
-            return (false, "This email address is already in use by another user.");
+            return Result.Fail("This email address is already in use by another user.");
         }
 
         // 2. Phone uniqueness check
         if (await _unitOfWork.Members.IsPhoneExistsAsync(model.Phone))
         {
-            return (false, "This phone number is already registered.");
+            return Result.Fail("This phone number is already registered.");
         }
 
         // 3. Minimum age validation (16 years)
@@ -114,59 +115,36 @@ public class MemberService : IMemberService
 
         if (age < 16)
         {
-            return (false, "Member must be at least 16 years old to register.");
+            return Result.Fail("Member must be at least 16 years old to register.");
         }
 
-        // 4. Map Entity
-        var member = new Member
-        {
-            Name = model.Name.Trim(),
-            Email = model.Email.Trim(),
-            Phone = model.Phone.Trim(),
-            DateOfBirth = model.DateOfBirth,
-            Gender = model.Gender,
-            JoinDate = today,
-            CreatedAt = DateTime.UtcNow,
-            Address = new Address
-            {
-                BuildingNumber = model.BuildingNumber,
-                Street = model.Street.Trim(),
-                City = model.City.Trim()
-            },
-            HealthRecord = new HealthRecord
-            {
-                Height = model.Height,
-                Weight = model.Weight,
-                BloodType = model.BloodType,
-                MedicalConditions = model.Note?.Trim(),
-                CreatedAt = DateTime.UtcNow
-            }
-        };
+        // 4. Map Entity via AutoMapper
+        var member = _mapper.Map<Member>(model);
 
         _unitOfWork.Members.Add(member);
         await _unitOfWork.SaveChangesAsync();
 
-        return (true, null);
+        return Result.Ok();
     }
 
-    public async Task<(bool Success, string? ErrorMessage)> UpdateMemberAsync(EditMemberViewModel model)
+    public async Task<Result> UpdateMemberAsync(EditMemberViewModel model)
     {
         var member = await _unitOfWork.Members.GetByIdAsync(model.Id);
         if (member == null)
         {
-            return (false, "Member not found.");
+            return Result.Fail("Member not found.", "NotFound");
         }
 
         // Email uniqueness check excluding current member
         if (await _unitOfWork.Members.IsEmailExistsAsync(model.Email, model.Id))
         {
-            return (false, "This email address is already in use by another user.");
+            return Result.Fail("This email address is already in use by another user.");
         }
 
         // Phone uniqueness check excluding current member
         if (await _unitOfWork.Members.IsPhoneExistsAsync(model.Phone, model.Id))
         {
-            return (false, "This phone number is already in use by another user.");
+            return Result.Fail("This phone number is already in use by another user.");
         }
 
         // Update fields
@@ -186,21 +164,21 @@ public class MemberService : IMemberService
         _unitOfWork.Members.Update(member);
         await _unitOfWork.SaveChangesAsync();
 
-        return (true, null);
+        return Result.Ok();
     }
 
-    public async Task<(bool Success, string? ErrorMessage)> DeleteMemberAsync(int id)
+    public async Task<Result> DeleteMemberAsync(int id)
     {
         var member = await _unitOfWork.Members.GetByIdAsync(id);
         if (member == null)
         {
-            return (false, "Member not found.");
+            return Result.Fail("Member not found.", "NotFound");
         }
 
         // Check active bookings
         if (await _unitOfWork.Members.HasActiveBookingsAsync(id))
         {
-            return (false, "Cannot delete a member with active or ongoing session bookings.");
+            return Result.Fail("Cannot delete a member with active or ongoing session bookings.");
         }
 
         var healthRecord = await _unitOfWork.HealthRecords.GetByIdAsync(id);
@@ -212,6 +190,6 @@ public class MemberService : IMemberService
         _unitOfWork.Members.Delete(member);
         await _unitOfWork.SaveChangesAsync();
 
-        return (true, null);
+        return Result.Ok();
     }
 }

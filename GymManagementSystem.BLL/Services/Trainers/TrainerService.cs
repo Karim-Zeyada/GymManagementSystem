@@ -1,4 +1,5 @@
 using AutoMapper;
+using GymManagementSystem.BLL.Common;
 using GymManagementSystem.BLL.ViewModels.Trainers;
 using GymManagementSystem.DAL.Models;
 using GymManagementSystem.DAL.Models.ValueObjects;
@@ -66,61 +67,46 @@ public class TrainerService : ITrainerService
         };
     }
 
-    public async Task<(bool Success, string? ErrorMessage)> CreateTrainerAsync(CreateTrainerViewModel model)
+    public async Task<Result> CreateTrainerAsync(CreateTrainerViewModel model)
     {
         // 1. Email uniqueness
         if (await _unitOfWork.Trainers.IsEmailExistsAsync(model.Email))
         {
-            return (false, "A user with this email address already exists.");
+            return Result.Fail("A user with this email address already exists.");
         }
 
         // 2. Phone uniqueness
         if (await _unitOfWork.Trainers.IsPhoneExistsAsync(model.Phone))
         {
-            return (false, "A user with this phone number already exists.");
+            return Result.Fail("A user with this phone number already exists.");
         }
 
-        var trainer = new Trainer
-        {
-            Name = model.Name.Trim(),
-            Email = model.Email.Trim(),
-            Phone = model.Phone.Trim(),
-            DateOfBirth = model.DateOfBirth,
-            Gender = model.Gender,
-            Speciality = model.Speciality,
-            CreatedAt = DateTime.UtcNow,
-            Address = new Address
-            {
-                BuildingNumber = model.BuildingNumber,
-                Street = model.Street.Trim(),
-                City = model.City.Trim()
-            }
-        };
+        var trainer = _mapper.Map<Trainer>(model);
 
         _unitOfWork.Trainers.Add(trainer);
         await _unitOfWork.SaveChangesAsync();
 
-        return (true, null);
+        return Result.Ok();
     }
 
-    public async Task<(bool Success, string? ErrorMessage)> UpdateTrainerAsync(EditTrainerViewModel model)
+    public async Task<Result> UpdateTrainerAsync(EditTrainerViewModel model)
     {
         var trainer = await _unitOfWork.Trainers.GetByIdAsync(model.Id);
         if (trainer == null)
         {
-            return (false, "Trainer not found.");
+            return Result.Fail("Trainer not found.", "NotFound");
         }
 
         // Email uniqueness check excluding current trainer
         if (await _unitOfWork.Trainers.IsEmailExistsAsync(model.Email, model.Id))
         {
-            return (false, "A user with this email address already exists.");
+            return Result.Fail("A user with this email address already exists.");
         }
 
         // Phone uniqueness check excluding current trainer
         if (await _unitOfWork.Trainers.IsPhoneExistsAsync(model.Phone, model.Id))
         {
-            return (false, "A user with this phone number already exists.");
+            return Result.Fail("A user with this phone number already exists.");
         }
 
         trainer.Name = model.Name.Trim();
@@ -140,26 +126,26 @@ public class TrainerService : ITrainerService
         _unitOfWork.Trainers.Update(trainer);
         await _unitOfWork.SaveChangesAsync();
 
-        return (true, null);
+        return Result.Ok();
     }
 
-    public async Task<(bool Success, string? ErrorMessage)> DeleteTrainerAsync(int id)
+    public async Task<Result> DeleteTrainerAsync(int id)
     {
         var trainer = await _unitOfWork.Trainers.GetByIdAsync(id);
         if (trainer == null)
         {
-            return (false, "Trainer not found.");
+            return Result.Fail("Trainer not found.", "NotFound");
         }
 
         // Check active sessions
         if (await _unitOfWork.Trainers.HasActiveSessionsAsync(id))
         {
-            return (false, "Cannot delete a trainer who has active or upcoming sessions assigned.");
+            return Result.Fail("Cannot delete a trainer who has active or upcoming sessions assigned.");
         }
 
         _unitOfWork.Trainers.Delete(trainer);
         await _unitOfWork.SaveChangesAsync();
 
-        return (true, null);
+        return Result.Ok();
     }
 }

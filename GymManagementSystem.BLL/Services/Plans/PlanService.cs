@@ -1,4 +1,5 @@
 using AutoMapper;
+using GymManagementSystem.BLL.Common;
 using GymManagementSystem.BLL.ViewModels.Plans;
 using GymManagementSystem.DAL.Repositories.UnitOfWork;
 
@@ -37,18 +38,18 @@ public class PlanService : IPlanService
         return _mapper.Map<EditPlanViewModel>(plan);
     }
 
-    public async Task<(bool Success, string? ErrorMessage)> UpdatePlanAsync(EditPlanViewModel model)
+    public async Task<Result> UpdatePlanAsync(EditPlanViewModel model)
     {
         var plan = await _unitOfWork.Plans.GetByIdAsync(model.Id);
         if (plan == null)
         {
-            return (false, "Plan not found.");
+            return Result.Fail("Plan not found.", "NotFound");
         }
 
         // Business rule: Cannot update a plan with active memberships
         if (await _unitOfWork.Plans.HasActiveMembershipsAsync(model.Id))
         {
-            return (false, "Cannot update a plan with active memberships to preserve existing contracts.");
+            return Result.Fail("Cannot update a plan with active memberships to preserve existing contracts.");
         }
 
         // Name cannot be modified (preserves historical references)
@@ -60,21 +61,21 @@ public class PlanService : IPlanService
         _unitOfWork.Plans.Update(plan);
         await _unitOfWork.SaveChangesAsync();
 
-        return (true, null);
+        return Result.Ok();
     }
 
-    public async Task<(bool Success, string? ErrorMessage)> ToggleStatusAsync(int id)
+    public async Task<Result> ToggleStatusAsync(int id)
     {
         var plan = await _unitOfWork.Plans.GetByIdAsync(id);
         if (plan == null)
         {
-            return (false, "Plan not found.");
+            return Result.Fail("Plan not found.", "NotFound");
         }
 
         // Business rule: Cannot deactivate a plan with active memberships
         if (plan.IsActive && await _unitOfWork.Plans.HasActiveMembershipsAsync(id))
         {
-            return (false, "Cannot deactivate a plan with active memberships.");
+            return Result.Fail("Cannot deactivate a plan with active memberships.");
         }
 
         plan.IsActive = !plan.IsActive;
@@ -83,6 +84,6 @@ public class PlanService : IPlanService
         _unitOfWork.Plans.Update(plan);
         await _unitOfWork.SaveChangesAsync();
 
-        return (true, null);
+        return Result.Ok();
     }
 }

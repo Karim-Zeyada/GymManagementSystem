@@ -45,6 +45,8 @@ public class SessionController : Controller
     public async Task<IActionResult> Create()
     {
         var model = await _sessionService.GetCreateSessionViewModelAsync();
+        ViewBag.Categories = model.Categories;
+        ViewBag.Trainers = model.Trainers;
         return View(model);
     }
 
@@ -58,6 +60,8 @@ public class SessionController : Controller
             var reloadModel = await _sessionService.GetCreateSessionViewModelAsync();
             model.Categories = reloadModel.Categories;
             model.Trainers = reloadModel.Trainers;
+            ViewBag.Categories = model.Categories;
+            ViewBag.Trainers = model.Trainers;
             return View(model);
         }
 
@@ -68,6 +72,8 @@ public class SessionController : Controller
             var reloadModel = await _sessionService.GetCreateSessionViewModelAsync();
             model.Categories = reloadModel.Categories;
             model.Trainers = reloadModel.Trainers;
+            ViewBag.Categories = model.Categories;
+            ViewBag.Trainers = model.Trainers;
             return View(model);
         }
 
@@ -97,6 +103,7 @@ public class SessionController : Controller
             return RedirectToAction(nameof(Index));
         }
 
+        ViewBag.Trainers = model.Trainers;
         return View(model);
     }
 
@@ -118,6 +125,7 @@ public class SessionController : Controller
                 model.Trainers = freshModel.Trainers;
                 model.CategoryName = freshModel.CategoryName;
             }
+            ViewBag.Trainers = model.Trainers;
             return View(model);
         }
 
@@ -131,6 +139,7 @@ public class SessionController : Controller
                 model.Trainers = freshModel.Trainers;
                 model.CategoryName = freshModel.CategoryName;
             }
+            ViewBag.Trainers = model.Trainers;
             return View(model);
         }
 

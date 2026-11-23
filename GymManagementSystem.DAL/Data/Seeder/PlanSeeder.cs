@@ -1,4 +1,4 @@
-﻿using GymManagementSystem.DAL.Data.Contexts;
+using GymManagementSystem.DAL.Data.Contexts;
 using GymManagementSystem.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
