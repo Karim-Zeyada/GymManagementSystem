@@ -1,0 +1,60 @@
+@model HealthRecordDetailsViewModel
+
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-7">
+            <div class="card shadow-sm border-0 rounded-3 overflow-hidden">
+                <div class="card-header bg-danger text-white py-3">
+                    <h4 class="mb-0 fw-bold">
+                        <i class="bi bi-heart-pulse-fill me-2"></i>Health Record: @Model.MemberName
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded-3 border-start border-4 border-primary">
+                                <small class="text-muted d-block mb-1">Height</small>
+                                <div class="display-6 fw-bold text-dark">@Model.Height <span class="fs-5 text-muted">cm</span></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded-3 border-start border-4 border-primary">
+                                <small class="text-muted d-block mb-1">Weight</small>
+                                <div class="display-6 fw-bold text-dark">@Model.Weight <span class="fs-5 text-muted">kg</span></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded-3 border-start border-4 border-danger">
+                                <small class="text-muted d-block mb-1">Blood Type</small>
+                                <div class="display-6 fw-bold text-danger">@Model.BloodType</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded-3 border-start border-4 border-warning">
+                                <small class="text-muted d-block mb-1">BMI Estimate</small>
+                                @{
+                                    decimal heightInMeters = Model.Height / 100m;
+                                    decimal bmi = heightInMeters > 0 ? Math.Round(Model.Weight / (heightInMeters * heightInMeters), 1) : 0;
+                                }
+                                <div class="display-6 fw-bold text-dark">@bmi <span class="fs-5 text-muted">kg/m²</span></div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="p-3 bg-light rounded-3">
+                                <small class="text-muted d-block mb-2 fw-semibold">
+                                    <i class="bi bi-sticky me-1"></i>Medical Conditions & Special Notes
+                                </small>
+                                <p class="mb-0 text-dark">@(string.IsNullOrWhiteSpace(Model.Note) ? "No medical conditions or notes recorded." : Model.Note)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-white border-top p-4 d-flex justify-content-between">
+                    <a asp-action="Details" asp-route-id="@Model.MemberId" class="btn btn-outline-secondary px-4">
+                        <i class="bi bi-arrow-left me-1"></i>Back to Member Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

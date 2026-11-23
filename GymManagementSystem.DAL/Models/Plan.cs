@@ -1,0 +1,16 @@
+namespace GymManagementSystem.DAL.Models
+{
+    public class Plan : BaseEntity
+    {
+        public string Name { get; set; } = default!;
+
+        public string Description { get; set; } = default!;
+
+        public int DurationDays { get; set; }
+
+        public decimal Price { get; set; }
+        public bool IsActive { get; set; } = true;
+
+        public ICollection<Membership> Memberships { get; set; } = new List<Membership>();
+    } 
+}

@@ -1,0 +1,159 @@
+@model CreateMemberViewModel
+
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9 col-xl-8">
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-header bg-primary-color text-white py-3">
+                    <h4 class="mb-0 fw-bold"><i class="bi bi-person-plus-fill me-2"></i>Add New Member</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Create" method="post" id="createMemberForm">
+                        @Html.AntiForgeryToken()
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <!-- Bootstrap Nav Tabs -->
+                        <ul class="nav nav-pills nav-fill mb-4 p-2 bg-light rounded-3" id="memberTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active fw-semibold" id="member-info-tab" data-bs-toggle="tab" data-bs-target="#member-info" type="button" role="tab" aria-controls="member-info" aria-selected="true">
+                                    <i class="bi bi-person-vcard me-2"></i>1. Member Info
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link fw-semibold" id="health-data-tab" data-bs-toggle="tab" data-bs-target="#health-data" type="button" role="tab" aria-controls="health-data" aria-selected="false">
+                                    <i class="bi bi-heart-pulse me-2"></i>2. Health Data
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content" id="memberTabContent">
+                            <!-- Tab 1: Member Info -->
+                            <div class="tab-pane fade show active" id="member-info" role="tabpanel" aria-labelledby="member-info-tab">
+                                <h5 class="text-primary-color mb-3 pb-2 border-bottom">
+                                    <i class="bi bi-person me-2"></i>Personal Information
+                                </h5>
+
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <label asp-for="Name" class="form-label fw-semibold">Full Name <span class="text-danger">*</span></label>
+                                        <input asp-for="Name" class="form-control" placeholder="e.g. Ahmed Ali" />
+                                        <span asp-validation-for="Name" class="text-danger small"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="Email" class="form-label fw-semibold">Email Address <span class="text-danger">*</span></label>
+                                        <input asp-for="Email" class="form-control" type="email" placeholder="e.g. ahmed@example.com" />
+                                        <span asp-validation-for="Email" class="text-danger small"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="Phone" class="form-label fw-semibold">Phone Number <span class="text-danger">*</span></label>
+                                        <input asp-for="Phone" class="form-control" placeholder="01012345678" />
+                                        <span asp-validation-for="Phone" class="text-danger small"></span>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label asp-for="DateOfBirth" class="form-label fw-semibold">Date of Birth <span class="text-danger">*</span></label>
+                                        <input asp-for="DateOfBirth" class="form-control" type="date" />
+                                        <span asp-validation-for="DateOfBirth" class="text-danger small"></span>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label asp-for="Gender" class="form-label fw-semibold">Gender <span class="text-danger">*</span></label>
+                                        <select asp-for="Gender" class="form-select" asp-items="Html.GetEnumSelectList<Gender>()">
+                                            <option value="">Select Gender</option>
+                                        </select>
+                                        <span asp-validation-for="Gender" class="text-danger small"></span>
+                                    </div>
+                                </div>
+
+                                <h5 class="text-primary-color mb-3 pb-2 border-bottom">
+                                    <i class="bi bi-geo-alt me-2"></i>Address Information
+                                </h5>
+
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-3">
+                                        <label asp-for="BuildingNumber" class="form-label fw-semibold">Building No. <span class="text-danger">*</span></label>
+                                        <input asp-for="BuildingNumber" class="form-control" type="number" placeholder="12" />
+                                        <span asp-validation-for="BuildingNumber" class="text-danger small"></span>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <label asp-for="Street" class="form-label fw-semibold">Street <span class="text-danger">*</span></label>
+                                        <input asp-for="Street" class="form-control" placeholder="El Tahrir St." />
+                                        <span asp-validation-for="Street" class="text-danger small"></span>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label asp-for="City" class="form-label fw-semibold">City <span class="text-danger">*</span></label>
+                                        <input asp-for="City" class="form-control" placeholder="Cairo" />
+                                        <span asp-validation-for="City" class="text-danger small"></span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-end">
+                                    <button type="button" class="btn btn-outline-primary px-4" onclick="document.getElementById('health-data-tab').click();">
+                                        Next: Health Data <i class="bi bi-arrow-right ms-1"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Tab 2: Health Data -->
+                            <div class="tab-pane fade" id="health-data" role="tabpanel" aria-labelledby="health-data-tab">
+                                <h5 class="text-primary-color mb-3 pb-2 border-bottom">
+                                    <i class="bi bi-heart-pulse me-2"></i>Health & Medical Details
+                                </h5>
+
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-4">
+                                        <label asp-for="Height" class="form-label fw-semibold">Height (cm) <span class="text-danger">*</span></label>
+                                        <div class="input-group">
+                                            <input asp-for="Height" class="form-control" type="number" step="0.1" placeholder="175" />
+                                            <span class="input-group-text">cm</span>
+                                        </div>
+                                        <span asp-validation-for="Height" class="text-danger small"></span>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label asp-for="Weight" class="form-label fw-semibold">Weight (kg) <span class="text-danger">*</span></label>
+                                        <div class="input-group">
+                                            <input asp-for="Weight" class="form-control" type="number" step="0.1" placeholder="70" />
+                                            <span class="input-group-text">kg</span>
+                                        </div>
+                                        <span asp-validation-for="Weight" class="text-danger small"></span>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label asp-for="BloodType" class="form-label fw-semibold">Blood Type <span class="text-danger">*</span></label>
+                                        <select asp-for="BloodType" class="form-select" asp-items="Html.GetEnumSelectList<BloodType>()">
+                                            <option value="">Select Blood Type</option>
+                                        </select>
+                                        <span asp-validation-for="BloodType" class="text-danger small"></span>
+                                    </div>
+                                    <div class="col-12">
+                                        <label asp-for="Note" class="form-label fw-semibold">Medical Conditions / Notes</label>
+                                        <textarea asp-for="Note" class="form-control" rows="3" placeholder="Enter any allergies, chronic conditions, or physical notes (optional)..."></textarea>
+                                        <span asp-validation-for="Note" class="text-danger small"></span>
+                                    </div>
+                                </div>
+
+                                <div class="alert alert-info d-flex align-items-center" role="alert">
+                                    <i class="bi bi-info-circle-fill me-2 fs-5"></i>
+                                    <div>Join date is calculated automatically upon registration.</div>
+                                </div>
+
+                                <div class="d-flex justify-content-between pt-3 border-top">
+                                    <button type="button" class="btn btn-outline-secondary px-4" onclick="document.getElementById('member-info-tab').click();">
+                                        <i class="bi bi-arrow-left me-1"></i> Back to Member Info
+                                    </button>
+                                    <div class="d-flex gap-2">
+                                        <a asp-action="Index" class="btn btn-outline-secondary px-4">Cancel</a>
+                                        <button type="submit" class="btn btn-primary-color text-white px-4">
+                                            <i class="bi bi-check-circle me-1"></i> Submit Registration
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
