@@ -1,0 +1,95 @@
+@model GymManagementSystem.BLL.ViewModels.Account.LoginViewModel
+
+@{
+    ViewData["Title"] = "Portal Sign In";
+}
+
+<div class="row justify-content-center py-5 my-3">
+    <div class="col-12 col-md-8 col-lg-5">
+        <div class="power-card overflow-hidden">
+            <!-- Header -->
+            <div class="p-4 text-center border-bottom border-secondary border-opacity-25" style="background: radial-gradient(circle at top, rgba(255,85,0,0.2) 0%, rgba(17,19,27,0.95) 75%);">
+                <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-power-accent text-white mb-3" style="width: 48px; height: 48px; box-shadow: 0 0 20px var(--accent-glow);">
+                    <i class="bi bi-fire fs-3 text-white"></i>
+                </div>
+                <h3 class="fw-bold text-white font-display text-uppercase mb-1 tracking-wider">PORTAL ACCESS</h3>
+                <p class="text-secondary small mb-0 font-mono" style="color: #CBD5E1 !important;">Authenticate to manage athletes, classes, and schedules</p>
+            </div>
+
+            <!-- Card Body -->
+            <div class="p-4 p-md-5">
+                <form asp-action="Login" method="post" id="loginForm">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="ReturnUrl" />
+
+                    <div asp-validation-summary="ModelOnly" class="alert power-alert-danger mb-4" role="alert"></div>
+
+                    <!-- Email Input -->
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label font-display text-uppercase" style="color: #CBD5E1 !important;">
+                            <i class="bi bi-envelope-fill text-power-accent me-1"></i>
+                            Email Address
+                        </label>
+                        <input asp-for="Email" id="emailInput" class="form-control form-control-lg font-mono" placeholder="admin@gym.com" autocomplete="username" />
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Password Input -->
+                    <div class="mb-4">
+                        <label asp-for="Password" class="form-label font-display text-uppercase" style="color: #CBD5E1 !important;">
+                            <i class="bi bi-shield-lock-fill text-power-accent me-1"></i>
+                            Password
+                        </label>
+                        <input asp-for="Password" id="passwordInput" type="password" class="form-control form-control-lg font-mono" placeholder="••••••••" autocomplete="current-password" />
+                        <span asp-validation-for="Password" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Remember Me -->
+                    <div class="form-check mb-4">
+                        <input asp-for="RememberMe" class="form-check-input bg-dark border-secondary" />
+                        <label asp-for="RememberMe" class="form-check-label text-secondary small" style="color: #CBD5E1 !important;">
+                            Keep session active on this device
+                        </label>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="d-grid mb-4">
+                        <button type="submit" class="btn btn-power-primary btn-lg">
+                            Authenticate
+                            <i class="bi bi-arrow-right ms-2"></i>
+                        </button>
+                    </div>
+
+                    <!-- Quick Demo Credentials Box -->
+                    <div class="power-card p-3 border-secondary border-opacity-25" style="background-color: var(--bg-surface-2);">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="small font-display text-uppercase text-power-accent fw-bold">Demo Quick-Access</span>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-sm btn-power-outline flex-fill py-1 px-2 font-mono text-white small" onclick="fillAdminCredentials()">
+                                <i class="bi bi-shield-fill text-danger me-1"></i> Admin Auto-Fill
+                            </button>
+                            <button type="button" class="btn btn-sm btn-power-outline flex-fill py-1 px-2 font-mono text-white small" onclick="fillTrainerCredentials()">
+                                <i class="bi bi-person-workspace text-info me-1"></i> Trainer Auto-Fill
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function fillAdminCredentials() {
+            document.getElementById('emailInput').value = 'admin@gym.com';
+            document.getElementById('passwordInput').value = 'Admin@123';
+        }
+        function fillTrainerCredentials() {
+            document.getElementById('emailInput').value = 'trainer@gym.com';
+            document.getElementById('passwordInput').value = 'Trainer@123';
+        }
+    </script>
+}

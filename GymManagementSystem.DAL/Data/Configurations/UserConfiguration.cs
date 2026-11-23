@@ -37,7 +37,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .IsUnique();
 
         // phone format validation
-        builder.ToTable(t =>
+        builder.ToTable("Users", t =>
         {
             t.HasCheckConstraint(
                 "User_Phone_Ck",

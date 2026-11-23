@@ -1,35 +1,48 @@
 @model DeleteMemberViewModel
 
-<div class="container mt-5 mb-5">
+@{
+    ViewData["Title"] = $"Delete Athlete - {Model.Name}";
+}
+
+<div class="container py-4">
     <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6">
-            <div class="card shadow-sm border-0 rounded-3">
-                <div class="card-header bg-danger text-white py-3">
-                    <h4 class="mb-0 fw-bold"><i class="bi bi-exclamation-triangle-fill me-2"></i>Delete Member Confirmation</h4>
-                </div>
-                <div class="card-body p-4">
-                    <div class="alert alert-danger d-flex align-items-center mb-4" role="alert">
-                        <i class="bi bi-exclamation-octagon-fill fs-3 me-3"></i>
+        <div class="col-12 col-md-8 col-lg-6">
+            <div class="power-card overflow-hidden" style="border-top: 4px solid var(--status-danger);">
+                <!-- Header -->
+                <div class="p-4 p-md-5 border-bottom border-subtle">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="p-3 rounded-circle bg-surface-2 border border-subtle text-danger d-flex align-items-center justify-content-center" style="width: 52px; height: 52px;">
+                            <i class="bi bi-trash3 fs-4"></i>
+                        </div>
                         <div>
-                            <strong>Warning:</strong> Are you sure you want to delete this member?
-                            <div class="small">This action is permanent and cannot be undone. Member data and attached records will be removed.</div>
+                            <span class="power-badge-danger mb-1">Destructive Action</span>
+                            <h1 class="h3 mb-0 fw-bold font-display text-white text-uppercase">Delete Athlete</h1>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-4 p-md-5">
+                    <!-- Warning Banner -->
+                    <div class="power-alert-danger p-3 mb-4 d-flex align-items-center gap-3">
+                        <i class="bi bi-exclamation-triangle-fill fs-4 text-danger flex-shrink-0"></i>
+                        <div class="small">
+                            <strong>Permanent Deletion:</strong> Removing this athlete will permanently revoke their memberships and delete associated biometric records.
                         </div>
                     </div>
 
-                    <div class="card bg-light border-0 mb-4">
-                        <div class="card-body">
-                            <div class="mb-2">
-                                <small class="text-muted d-block">Member Name</small>
-                                <span class="fw-bold fs-5 text-dark">@Model.Name</span>
-                            </div>
-                            <div class="mb-2">
-                                <small class="text-muted d-block">Email Address</small>
-                                <span>@Model.Email</span>
-                            </div>
-                            <div>
-                                <small class="text-muted d-block">Phone Number</small>
-                                <span>@Model.Phone</span>
-                            </div>
+                    <!-- Summary Box -->
+                    <div class="power-stat-box mb-4">
+                        <div class="mb-3">
+                            <small class="text-secondary d-block font-display text-uppercase">Athlete Name</small>
+                            <span class="fw-bold fs-5 text-white">@Model.Name</span>
+                        </div>
+                        <div class="mb-2">
+                            <small class="text-secondary d-block font-display text-uppercase">Email Address</small>
+                            <span class="text-secondary font-mono small">@Model.Email</span>
+                        </div>
+                        <div>
+                            <small class="text-secondary d-block font-display text-uppercase">Phone</small>
+                            <span class="text-secondary font-mono small">@Model.Phone</span>
                         </div>
                     </div>
 
@@ -38,11 +51,10 @@
                         <input type="hidden" asp-for="Id" />
 
                         <div class="d-flex justify-content-between gap-3">
-                            <a asp-action="Index" class="btn btn-outline-secondary flex-fill">
-                                <i class="bi bi-x-circle me-1"></i>Cancel
-                            </a>
-                            <button type="submit" class="btn btn-danger flex-fill">
-                                <i class="bi bi-trash me-1"></i>Yes, Delete Member
+                            <a asp-action="Index" class="btn-power-ghost flex-fill justify-content-center">Cancel</a>
+                            <button type="submit" class="btn-power-danger flex-fill justify-content-center">
+                                <i class="bi bi-trash3 me-2"></i>
+                                Confirm Delete
                             </button>
                         </div>
                     </form>

@@ -1,16 +1,21 @@
 using GymManagementSystem.BLL.Services.Members;
 using GymManagementSystem.BLL.ViewModels.Members;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace GymManagementSystem.PL.Controllers
 {
+    [Authorize]
     public class MemberController : Controller
     {
         private readonly IMemberService _memberService;
+        private readonly ILogger<MemberController> _logger;
 
-        public MemberController(IMemberService memberService)
+        public MemberController(IMemberService memberService, ILogger<MemberController> logger)
         {
             _memberService = memberService;
+            _logger = logger;
         }
 
         // 1. Index (GET: /Member)
@@ -61,6 +66,7 @@ namespace GymManagementSystem.PL.Controllers
 
         // 3. Create (GET: /Member/Create)
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View(new CreateMemberViewModel
@@ -71,6 +77,7 @@ namespace GymManagementSystem.PL.Controllers
 
         // 4. Create (POST: /Member/Create)
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateMemberViewModel model)
         {
@@ -92,6 +99,7 @@ namespace GymManagementSystem.PL.Controllers
 
         // 5. Edit (GET: /Member/Edit/5)
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id)
         {
             if (id <= 0)
@@ -111,6 +119,7 @@ namespace GymManagementSystem.PL.Controllers
 
         // 6. Edit (POST: /Member/Edit/5)
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, EditMemberViewModel model)
         {
@@ -137,6 +146,7 @@ namespace GymManagementSystem.PL.Controllers
 
         // 7. Delete (GET: /Member/Delete/5 - Confirmation Page)
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             if (id <= 0)
@@ -157,6 +167,7 @@ namespace GymManagementSystem.PL.Controllers
         // 8. Delete (POST: /Member/Delete/5 - Commit Deletion)
         [HttpPost]
         [ActionName("Delete")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

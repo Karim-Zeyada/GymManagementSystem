@@ -1,9 +1,11 @@
 using AutoMapper;
 using GymManagementSystem.BLL.Common;
+using GymManagementSystem.BLL.Services.Attachments;
 using GymManagementSystem.BLL.ViewModels.Members;
 using GymManagementSystem.DAL.Models;
 using GymManagementSystem.DAL.Models.ValueObjects;
 using GymManagementSystem.DAL.Repositories.UnitOfWork;
+using Microsoft.Extensions.Logging;
 
 namespace GymManagementSystem.BLL.Services.Members;
 
@@ -11,11 +13,19 @@ public class MemberService : IMemberService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
+    private readonly IAttachmentService _attachmentService;
+    private readonly ILogger<MemberService> _logger;
 
-    public MemberService(IUnitOfWork unitOfWork, IMapper mapper)
+    public MemberService(
+        IUnitOfWork unitOfWork,
+        IMapper mapper,
+        IAttachmentService attachmentService,
+        ILogger<MemberService> logger)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
+        _attachmentService = attachmentService;
+        _logger = logger;
     }
 
     public async Task<IEnumerable<MemberViewModel>> GetAllMembersAsync()
@@ -121,9 +131,21 @@ public class MemberService : IMemberService
         // 4. Map Entity via AutoMapper
         var member = _mapper.Map<Member>(model);
 
+        // 5. Handle profile photo attachment
+        if (model.Photo != null)
+        {
+            var uploadResult = await _attachmentService.SaveAsync(model.Photo, "members");
+            if (!uploadResult.IsSuccess)
+            {
+                return Result.Fail(uploadResult.Error ?? "Failed to save profile photo.");
+            }
+            member.Photo = uploadResult.Value;
+        }
+
         _unitOfWork.Members.Add(member);
         await _unitOfWork.SaveChangesAsync();
 
+        _logger.LogInformation("Member registered successfully with ID {MemberId}.", member.Id);
         return Result.Ok();
     }
 
@@ -147,6 +169,22 @@ public class MemberService : IMemberService
             return Result.Fail("This phone number is already in use by another user.");
         }
 
+        // Handle profile photo update
+        if (model.PhotoFile != null)
+        {
+            var uploadResult = await _attachmentService.SaveAsync(model.PhotoFile, "members");
+            if (!uploadResult.IsSuccess)
+            {
+                return Result.Fail(uploadResult.Error ?? "Failed to save profile photo.");
+            }
+
+            if (!string.IsNullOrWhiteSpace(member.Photo))
+            {
+                _attachmentService.Delete(member.Photo, "members");
+            }
+            member.Photo = uploadResult.Value;
+        }
+
         // Update fields
         member.Name = model.Name.Trim();
         member.Email = model.Email.Trim();
@@ -164,6 +202,7 @@ public class MemberService : IMemberService
         _unitOfWork.Members.Update(member);
         await _unitOfWork.SaveChangesAsync();
 
+        _logger.LogInformation("Member ID {MemberId} updated successfully.", member.Id);
         return Result.Ok();
     }
 
@@ -187,9 +226,15 @@ public class MemberService : IMemberService
             _unitOfWork.HealthRecords.Delete(healthRecord);
         }
 
+        if (!string.IsNullOrWhiteSpace(member.Photo))
+        {
+            _attachmentService.Delete(member.Photo, "members");
+        }
+
         _unitOfWork.Members.Delete(member);
         await _unitOfWork.SaveChangesAsync();
 
+        _logger.LogInformation("Member ID {MemberId} deleted successfully.", id);
         return Result.Ok();
     }
 }

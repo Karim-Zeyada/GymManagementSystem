@@ -1,71 +1,76 @@
 @model EditPlanViewModel
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6">
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-primary-color text-white py-3">
-                    <h4 class="mb-0"><i class="bi bi-pencil-square me-2"></i>Edit Plan</h4>
+@{
+    ViewData["Title"] = $"Edit {Model.Name}";
+}
+
+<div class="row justify-content-center py-5">
+    <div class="col-12 col-md-8 col-lg-6">
+        <div class="power-card overflow-hidden">
+            <div class="p-4 bg-black bg-opacity-30 border-bottom border-secondary border-opacity-25">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="p-2 rounded-circle bg-black bg-opacity-40 border border-secondary border-opacity-25 text-power-accent d-flex align-items-center justify-content-center" style="width: 42px; height: 42px;">
+                        <i class="bi bi-pencil fs-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="fw-bold text-white font-display text-uppercase mb-0">Edit Membership Plan</h3>
+                        <span class="text-secondary small">Update price, duration and description</span>
+                    </div>
                 </div>
-                <div class="card-body p-4">
-                    <form asp-action="Edit" method="post">
-                        @Html.AntiForgeryToken()
-                        <input type="hidden" asp-for="Id" />
+            </div>
 
-                        <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-4" role="alert"></div>
+            <div class="p-4 p-md-5">
+                <form asp-action="Edit" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="Id" />
+                    <div asp-validation-summary="ModelOnly" class="alert power-alert-danger mb-4" role="alert"></div>
 
-                        <!-- Locked / Display-Only Field -->
-                        <div class="mb-4 p-3 bg-light rounded border">
-                            <label class="form-label text-muted small mb-1">
-                                <i class="bi bi-lock-fill me-1"></i>Plan Name (Locked)
-                            </label>
-                            <input asp-for="Name" class="form-control-plaintext fw-bold fs-5 text-dark" readonly />
-                            <small class="text-muted">Plan name cannot be changed to preserve historical references.</small>
-                        </div>
+                    <!-- Locked Plan Name -->
+                    <div class="mb-4 p-3 power-card" style="background-color: var(--bg-surface-2);">
+                        <label class="text-secondary small font-display text-uppercase mb-1 d-block">
+                            <i class="bi bi-lock me-1 text-power-accent"></i>
+                            Plan Name (Protected)
+                        </label>
+                        <input asp-for="Name" class="form-control-plaintext text-white fw-bold fs-5 p-0 font-display" readonly />
+                        <span class="text-muted small">Plan name cannot be changed to preserve active member contracts.</span>
+                    </div>
 
-                        <!-- Price -->
-                        <div class="mb-3">
-                            <label asp-for="Price" class="form-label fw-semibold">
-                                Price (EGP) <span class="text-danger">*</span>
-                            </label>
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="bi bi-currency-dollar"></i></span>
-                                <input asp-for="Price" class="form-control" type="number" step="0.01" placeholder="Enter plan price" />
-                            </div>
-                            <span asp-validation-for="Price" class="text-danger small"></span>
-                        </div>
+                    <!-- Price -->
+                    <div class="mb-4">
+                        <label asp-for="Price" class="form-label font-display text-uppercase">
+                            Price (EGP) <span class="text-power-accent">*</span>
+                        </label>
+                        <input asp-for="Price" type="number" step="1" class="form-control form-control-lg font-mono" placeholder="Enter price" />
+                        <span asp-validation-for="Price" class="text-danger small"></span>
+                    </div>
 
-                        <!-- Duration -->
-                        <div class="mb-3">
-                            <label asp-for="DurationDays" class="form-label fw-semibold">
-                                Duration in Days <span class="text-danger">*</span>
-                            </label>
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="bi bi-calendar3"></i></span>
-                                <input asp-for="DurationDays" class="form-control" type="number" placeholder="Enter duration in days" />
-                            </div>
-                            <span asp-validation-for="DurationDays" class="text-danger small"></span>
-                        </div>
+                    <!-- Duration in Days -->
+                    <div class="mb-4">
+                        <label asp-for="DurationDays" class="form-label font-display text-uppercase">
+                            Duration in Days <span class="text-power-accent">*</span>
+                        </label>
+                        <input asp-for="DurationDays" type="number" class="form-control form-control-lg font-mono" placeholder="Duration in days" />
+                        <span asp-validation-for="DurationDays" class="text-danger small"></span>
+                    </div>
 
-                        <!-- Description -->
-                        <div class="mb-4">
-                            <label asp-for="Description" class="form-label fw-semibold">
-                                Description <span class="text-danger">*</span>
-                            </label>
-                            <textarea asp-for="Description" class="form-control" rows="4" placeholder="Enter plan description..."></textarea>
-                            <span asp-validation-for="Description" class="text-danger small"></span>
-                        </div>
+                    <!-- Description -->
+                    <div class="mb-4">
+                        <label asp-for="Description" class="form-label font-display text-uppercase">
+                            Description & Perks <span class="text-power-accent">*</span>
+                        </label>
+                        <textarea asp-for="Description" rows="4" class="form-control" placeholder="Describe package perks..."></textarea>
+                        <span asp-validation-for="Description" class="text-danger small"></span>
+                    </div>
 
-                        <div class="d-flex justify-content-between gap-3 pt-3 border-top">
-                            <a asp-action="Index" class="btn btn-outline-secondary px-4">
-                                <i class="bi bi-x-circle me-1"></i>Cancel
-                            </a>
-                            <button type="submit" class="btn btn-primary-color text-white px-4">
-                                <i class="bi bi-check-circle me-1"></i>Save Changes
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                    <div class="d-flex justify-content-between align-items-center pt-3 border-top border-secondary border-opacity-25 mt-4">
+                        <a asp-action="Index" class="btn btn-power-outline px-4">
+                            Cancel
+                        </a>
+                        <button type="submit" class="btn btn-power-primary px-4">
+                            Save Changes
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

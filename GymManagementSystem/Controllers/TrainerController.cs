@@ -1,16 +1,21 @@
 using GymManagementSystem.BLL.Services.Trainers;
 using GymManagementSystem.BLL.ViewModels.Trainers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace GymManagementSystem.PL.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class TrainerController : Controller
     {
         private readonly ITrainerService _trainerService;
+        private readonly ILogger<TrainerController> _logger;
 
-        public TrainerController(ITrainerService trainerService)
+        public TrainerController(ITrainerService trainerService, ILogger<TrainerController> logger)
         {
             _trainerService = trainerService;
+            _logger = logger;
         }
 
         // 1. Index (GET: /Trainer)

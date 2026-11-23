@@ -38,6 +38,28 @@ public class PlanService : IPlanService
         return _mapper.Map<EditPlanViewModel>(plan);
     }
 
+    public async Task<Result> CreatePlanAsync(CreatePlanViewModel model)
+    {
+        var plans = await _unitOfWork.Plans.GetAllAsync();
+        if (plans.Any(p => p.Name.Equals(model.Name.Trim(), StringComparison.OrdinalIgnoreCase)))
+        {
+            return Result.Fail("A gym plan with this name already exists.");
+        }
+
+        var plan = _mapper.Map<DAL.Models.Plan>(model);
+        plan.Name = model.Name.Trim();
+        plan.Description = model.Description.Trim();
+        plan.Price = model.Price;
+        plan.DurationDays = model.DurationDays;
+        plan.IsActive = true;
+        plan.CreatedAt = DateTime.UtcNow;
+
+        _unitOfWork.Plans.Add(plan);
+        await _unitOfWork.SaveChangesAsync();
+
+        return Result.Ok();
+    }
+
     public async Task<Result> UpdatePlanAsync(EditPlanViewModel model)
     {
         var plan = await _unitOfWork.Plans.GetByIdAsync(model.Id);
