@@ -36,7 +36,7 @@
                                 <label asp-for="CategoryId" class="form-label fw-semibold">
                                     Category <span class="text-danger">*</span>
                                 </label>
-                                <select asp-for="CategoryId" asp-items="Model.Categories" class="form-select">
+                                <select asp-for="CategoryId" asp-items="@(ViewBag.Categories ?? Model.Categories)" class="form-select">
                                     <option value="">-- Select Category --</option>
                                 </select>
                                 <span asp-validation-for="CategoryId" class="text-danger small"></span>
@@ -46,7 +46,7 @@
                                 <label asp-for="TrainerId" class="form-label fw-semibold">
                                     Trainer <span class="text-danger">*</span>
                                 </label>
-                                <select asp-for="TrainerId" asp-items="Model.Trainers" class="form-select">
+                                <select asp-for="TrainerId" asp-items="@(ViewBag.Trainers ?? Model.Trainers)" class="form-select">
                                     <option value="">-- Select Trainer --</option>
                                 </select>
                                 <span asp-validation-for="TrainerId" class="text-danger small"></span>

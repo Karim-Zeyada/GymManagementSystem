@@ -1,16 +1,19 @@
 using GymManagementSystem.BLL.Services.Plans;
 using GymManagementSystem.BLL.ViewModels.Plans;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace GymManagementSystem.PL.Controllers
 {
     public class PlansController : Controller
     {
         private readonly IPlanService _planService;
+        private readonly ILogger<PlansController> _logger;
 
-        public PlansController(IPlanService planService)
+        public PlansController(IPlanService planService, ILogger<PlansController> logger)
         {
             _planService = planService;
+            _logger = logger;
         }
 
         public async Task<IActionResult> Index()

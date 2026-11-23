@@ -1,5 +1,6 @@
 using GymManagementSystem.BLL.Common;
 using GymManagementSystem.BLL.ViewModels.Sessions;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace GymManagementSystem.BLL.Services.Sessions;
 
@@ -13,4 +14,8 @@ public interface ISessionService
     Task<Result> UpdateSessionAsync(EditSessionViewModel model);
     Task<DeleteSessionViewModel?> GetSessionForDeleteAsync(int id);
     Task<Result> DeleteSessionAsync(int id);
+
+    // Lookup helpers for dropdowns ("Some Methods")
+    Task<IEnumerable<SelectListItem>> GetCategoriesSelectListAsync();
+    Task<IEnumerable<SelectListItem>> GetTrainersSelectListAsync();
 }
