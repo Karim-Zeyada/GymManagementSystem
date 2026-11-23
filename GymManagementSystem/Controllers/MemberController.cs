@@ -1,16 +1,19 @@
 using GymManagementSystem.BLL.Services.Members;
 using GymManagementSystem.BLL.ViewModels.Members;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace GymManagementSystem.PL.Controllers
 {
     public class MemberController : Controller
     {
         private readonly IMemberService _memberService;
+        private readonly ILogger<MemberController> _logger;
 
-        public MemberController(IMemberService memberService)
+        public MemberController(IMemberService memberService, ILogger<MemberController> logger)
         {
             _memberService = memberService;
+            _logger = logger;
         }
 
         // 1. Index (GET: /Member)

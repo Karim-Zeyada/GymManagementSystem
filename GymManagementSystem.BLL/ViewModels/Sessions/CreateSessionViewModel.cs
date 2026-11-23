@@ -3,13 +3,15 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace GymManagementSystem.BLL.ViewModels.Sessions;
 
-public class CreateSessionViewModel
+public class CreateSessionViewModel : IValidatableObject
 {
     [Required(ErrorMessage = "Category is required.")]
+    [Range(1, int.MaxValue, ErrorMessage = "Please select a category.")]
     [Display(Name = "Category")]
     public int CategoryId { get; set; }
 
     [Required(ErrorMessage = "Trainer is required.")]
+    [Range(1, int.MaxValue, ErrorMessage = "Please select a trainer.")]
     [Display(Name = "Trainer")]
     public int TrainerId { get; set; }
 
@@ -33,4 +35,17 @@ public class CreateSessionViewModel
 
     public IEnumerable<SelectListItem>? Categories { get; set; }
     public IEnumerable<SelectListItem>? Trainers { get; set; }
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        if (StartDate <= DateTime.Now)
+        {
+            yield return new ValidationResult("Session start time must be in the future.", new[] { nameof(StartDate) });
+        }
+
+        if (EndDate <= StartDate)
+        {
+            yield return new ValidationResult("Session end time must be after the start time.", new[] { nameof(EndDate) });
+        }
+    }
 }
