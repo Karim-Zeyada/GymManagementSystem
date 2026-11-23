@@ -9,4 +9,5 @@ public interface ITrainerRepository : IGenericRepository<Trainer>
     Task<bool> IsEmailExistsAsync(string email, int? excludeTrainerId = null);
     Task<bool> IsPhoneExistsAsync(string phone, int? excludeTrainerId = null);
     Task<bool> HasActiveSessionsAsync(int trainerId);
+    Task<int> GetTotalCountAsync();
 }

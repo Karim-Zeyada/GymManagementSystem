@@ -80,9 +80,9 @@ namespace GymManagementSystem.PL.Controllers
             }
 
             var result = await _memberService.CreateMemberAsync(model);
-            if (!result.Success)
+            if (!result.IsSuccess)
             {
-                ModelState.AddModelError(string.Empty, result.ErrorMessage ?? "Failed to create member.");
+                ModelState.AddModelError(string.Empty, result.Error ?? "Failed to create member.");
                 return View(model);
             }
 
@@ -125,9 +125,9 @@ namespace GymManagementSystem.PL.Controllers
             }
 
             var result = await _memberService.UpdateMemberAsync(model);
-            if (!result.Success)
+            if (!result.IsSuccess)
             {
-                ModelState.AddModelError(string.Empty, result.ErrorMessage ?? "Failed to update member.");
+                ModelState.AddModelError(string.Empty, result.Error ?? "Failed to update member.");
                 return View(model);
             }
 
@@ -166,9 +166,9 @@ namespace GymManagementSystem.PL.Controllers
             }
 
             var result = await _memberService.DeleteMemberAsync(id);
-            if (!result.Success)
+            if (!result.IsSuccess)
             {
-                TempData["ErrorMessage"] = result.ErrorMessage;
+                TempData["ErrorMessage"] = result.Error;
                 return RedirectToAction(nameof(Delete), new { id });
             }
 

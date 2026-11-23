@@ -69,9 +69,9 @@ namespace GymManagementSystem.PL.Controllers
             }
 
             var result = await _planService.UpdatePlanAsync(model);
-            if (!result.Success)
+            if (!result.IsSuccess)
             {
-                ModelState.AddModelError(string.Empty, result.ErrorMessage ?? "Failed to update plan.");
+                ModelState.AddModelError(string.Empty, result.Error ?? "Failed to update plan.");
                 return View(model);
             }
 
@@ -96,9 +96,9 @@ namespace GymManagementSystem.PL.Controllers
             }
 
             var result = await _planService.ToggleStatusAsync(id);
-            if (!result.Success)
+            if (!result.IsSuccess)
             {
-                TempData["ErrorMessage"] = result.ErrorMessage;
+                TempData["ErrorMessage"] = result.Error;
             }
             else
             {

@@ -61,7 +61,8 @@ namespace GymManagementSystem.DAL.Migrations
                     b.HasIndex("SessionId");
 
                     b.HasIndex("MemberId", "SessionId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
 
                     b.ToTable("Bookings", t =>
                         {
@@ -109,8 +110,8 @@ namespace GymManagementSystem.DAL.Migrations
 
                     b.Property<string>("BloodType")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -369,6 +370,9 @@ namespace GymManagementSystem.DAL.Migrations
 
                     b.Property<int?>("HealthRecordId")
                         .HasColumnType("int");
+
+                    b.Property<DateOnly>("JoinDate")
+                        .HasColumnType("date");
 
                     b.Property<string>("Photo")
                         .HasMaxLength(1000)
