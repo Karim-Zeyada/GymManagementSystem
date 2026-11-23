@@ -1,29 +1,20 @@
-﻿
-using Microsoft.EntityFrameworkCore;
 using GymManagementSystem.DAL.Data.Contexts;
 using GymManagementSystem.DAL.Models;
+using GymManagementSystem.DAL.Repositories.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace GymManagementSystem.DAL.Repositories.Plans;
 
-public class PlanRepository : IPlanRepository
+public class PlanRepository : GenericRepository<Plan>, IPlanRepository
 {
-    public GymDbContext dbContext = new GymDbContext();
-    public void Add(Plan plan) => dbContext.Add(plan);
+    public PlanRepository(GymDbContext context) : base(context)
+    {
+    }
 
-    public void Delete(Plan plan)
-        => dbContext.Remove(plan);
-
-
-    public async Task<IEnumerable<Plan>> GetAllAsync()
-        => await dbContext.Plans.ToListAsync();
-
-
-    public async Task<Plan?> GetByIdAsync(int id)
-        => await dbContext.Plans.FirstOrDefaultAsync(p => p.Id == id);
-
-    public void Update(Plan plan) => dbContext.Plans.Update(plan);
-
-    public async Task<int> SaveChangesAsync() => await dbContext.SaveChangesAsync();
-
-
+    public async Task<bool> HasActiveMembershipsAsync(int planId)
+    {
+        var now = DateTime.UtcNow;
+        return await _context.Memberships
+            .AnyAsync(m => m.PlanId == planId && m.EndDate >= now);
+    }
 }

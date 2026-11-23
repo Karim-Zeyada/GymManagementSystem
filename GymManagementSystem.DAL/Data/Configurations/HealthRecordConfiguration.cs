@@ -16,7 +16,7 @@ public class HealthRecordConfiguration : IEntityTypeConfiguration<HealthRecord>
 
         builder.Property(h => h.BloodType)
             .HasConversion<string>()
-            .HasMaxLength(20);
+            .HasMaxLength(50);
 
         builder.Property(h => h.MedicalConditions)
             .HasMaxLength(500)

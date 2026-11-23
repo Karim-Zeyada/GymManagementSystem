@@ -8,10 +8,10 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
-        builder.HasDiscriminator<string>("UserType")
-            .HasValue<Member>("Member")
-            .HasValue<Trainer>("Trainer");
-
+        //builder.HasDiscriminator<string>("UserType")
+        //    .HasValue<Member>("Member")
+        //    .HasValue<Trainer>("Trainer");
+        
         builder.Property(u => u.Name)
             .HasMaxLength(100);
         builder.Property(u => u.Email)

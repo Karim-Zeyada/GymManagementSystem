@@ -1,19 +1,9 @@
-﻿using GymManagementSystem.DAL.Models;
+using GymManagementSystem.DAL.Models;
+using GymManagementSystem.DAL.Repositories.Generic;
 
 namespace GymManagementSystem.DAL.Repositories.Plans;
 
-public interface IPlanRepository
+public interface IPlanRepository : IGenericRepository<Plan>
 {
-    Task<IEnumerable<Plan>> GetAllAsync();
-    Task<Plan?> GetByIdAsync(int id);
-
-    void Add(Plan plan);
-    void Update(Plan plan);
-
-    void Delete(Plan plan);
-
-    Task<int> SaveChangesAsync();
-
-
+    Task<bool> HasActiveMembershipsAsync(int planId);
 }
- 
