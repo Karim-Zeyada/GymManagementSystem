@@ -13,6 +13,7 @@ using GymManagementSystem.DAL.Repositories.Sessions;
 using GymManagementSystem.DAL.Repositories.Trainers;
 using GymManagementSystem.DAL.Repositories.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,6 +43,7 @@ builder.Services.AddScoped<IAnalyticsService, AnalyticsService>();
 builder.Services.AddDbContext<GymDbContext>(options =>
 { 
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));  
+    options.ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning));
 });
 
 var app = builder.Build();
