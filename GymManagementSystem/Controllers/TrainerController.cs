@@ -61,9 +61,9 @@ namespace GymManagementSystem.PL.Controllers
             }
 
             var result = await _trainerService.CreateTrainerAsync(model);
-            if (!result.Success)
+            if (!result.IsSuccess)
             {
-                ModelState.AddModelError(string.Empty, result.ErrorMessage ?? "Failed to create trainer.");
+                ModelState.AddModelError(string.Empty, result.Error ?? "Failed to create trainer.");
                 return View(model);
             }
 
@@ -106,9 +106,9 @@ namespace GymManagementSystem.PL.Controllers
             }
 
             var result = await _trainerService.UpdateTrainerAsync(model);
-            if (!result.Success)
+            if (!result.IsSuccess)
             {
-                ModelState.AddModelError(string.Empty, result.ErrorMessage ?? "Failed to update trainer.");
+                ModelState.AddModelError(string.Empty, result.Error ?? "Failed to update trainer.");
                 return View(model);
             }
 
@@ -147,9 +147,9 @@ namespace GymManagementSystem.PL.Controllers
             }
 
             var result = await _trainerService.DeleteTrainerAsync(id);
-            if (!result.Success)
+            if (!result.IsSuccess)
             {
-                TempData["ErrorMessage"] = result.ErrorMessage;
+                TempData["ErrorMessage"] = result.Error;
                 return RedirectToAction(nameof(Delete), new { id });
             }
 
