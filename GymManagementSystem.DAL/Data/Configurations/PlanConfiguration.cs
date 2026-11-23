@@ -1,8 +1,8 @@
-﻿using GymManagementSystem.Models;
+﻿using GymManagementSystem.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace GymManagementSystem.Data.Configurations
+namespace GymManagementSystem.DAL.Data.Configurations
 {
     public class PlanConfiguration : IEntityTypeConfiguration<Plan>
     {
@@ -24,6 +24,9 @@ namespace GymManagementSystem.Data.Configurations
 
             builder.HasIndex(B => B.Name)
                 .IsUnique();
+
+            builder.HasQueryFilter(p => !p.IsDeleted);
         }
     }
 }
+   

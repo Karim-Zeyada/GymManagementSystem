@@ -1,4 +1,4 @@
-@model Plan
+@model PlanDetailsViewModel
 
 <div class="mt-5">
     <div class="row justify-content-center">
@@ -11,7 +11,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="text-center mb-4 py-3 bg-light rounded">
-                        <div class="display-3 fw-bold text-primary-color">@Model.Price</div>
+                        <div class="display-3 fw-bold text-primary-color">@Model.Price.ToString("N0")</div>
                         <small class="text-muted fs-5">EGP</small>
                     </div>
 
@@ -73,6 +73,9 @@
                     <div class="d-flex justify-content-between gap-2">
                         <a asp-action="Index" class="btn btn-outline flex-fill">
                             <i class="bi bi-arrow-left me-1"></i>Back
+                        </a>
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary-color flex-fill text-white">
+                            <i class="bi bi-pencil me-1"></i>Edit Plan
                         </a>
                     </div>
                 </div>

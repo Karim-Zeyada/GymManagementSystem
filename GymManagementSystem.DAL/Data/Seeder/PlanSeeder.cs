@@ -1,20 +1,19 @@
-﻿using GymManagementSystem.Data.Contexts;
-using GymManagementSystem.Models;
+﻿using GymManagementSystem.DAL.Data.Contexts;
+using GymManagementSystem.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace GymManagementSystem.Data.Seeder
+namespace GymManagementSystem.DAL.Data.Seeder
 {
     public static class PlanSeeder
     {
-        public static async Task SeedAsync()
+        public static async Task SeedAsync(GymDbContext dbContext)
         {
-            using var dbContext = new GymDbContext();
             bool hasAnyPlans = await dbContext.Plans.AnyAsync();
 
             if (hasAnyPlans)
             {
                 return;
-            }
+            } 
 
             List<Plan> plans = new List<Plan>
             {

@@ -1,13 +1,16 @@
-﻿using GymManagementSystem.Models;
+using GymManagementSystem.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace GymManagementSystem.Data.Contexts
+namespace GymManagementSystem.DAL.Data.Contexts
 {
     public class GymDbContext : DbContext
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public GymDbContext()
         {
-            optionsBuilder.UseSqlServer("Server=.;Database=GymManagementSystem;Trusted_Connection=True; trustServerCertificate=true");
+        }
+
+        public GymDbContext(DbContextOptions<GymDbContext> options) : base(options)
+        {
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -16,5 +19,16 @@ namespace GymManagementSystem.Data.Contexts
         }
 
         public DbSet<Plan> Plans { get; set; }
+
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<User> Users { get; set; }    
+        public DbSet<Member> Members { get; set; }
+        public DbSet<Trainer> Trainers { get; set; }
+        public DbSet<Session> Sessions { get; set; }
+        public DbSet<Membership> Memberships { get; set; }
+        public DbSet<Booking> Bookings { get; set; }
+        public DbSet<HealthRecord> HealthRecords { get; set; }
+
+
     }
 }
