@@ -46,6 +46,7 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.Address != null ? src.Address.City : string.Empty));
 
         CreateMap<CreateMemberViewModel, Member>()
+            .ForMember(dest => dest.Photo, opt => opt.Ignore())
             .ForMember(dest => dest.Address, opt => opt.MapFrom(src => new Address
             {
                 BuildingNumber = src.BuildingNumber,

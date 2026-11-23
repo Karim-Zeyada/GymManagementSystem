@@ -31,13 +31,13 @@ public class MemberRepository : GenericRepository<Member>, IMemberRepository
 
     public async Task<bool> IsEmailExistsAsync(string email, int? excludeMemberId = null)
     {
-        return await _context.Users
+        return await _context.GymUsers
             .AnyAsync(u => u.Email.ToLower() == email.Trim().ToLower() && (!excludeMemberId.HasValue || u.Id != excludeMemberId.Value));
     }
 
     public async Task<bool> IsPhoneExistsAsync(string phone, int? excludeMemberId = null)
     {
-        return await _context.Users
+        return await _context.GymUsers
             .AnyAsync(u => u.Phone == phone.Trim() && (!excludeMemberId.HasValue || u.Id != excludeMemberId.Value));
     }
 

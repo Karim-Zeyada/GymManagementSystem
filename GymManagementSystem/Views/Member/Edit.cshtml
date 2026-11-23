@@ -8,16 +8,18 @@
                     <h4 class="mb-0 fw-bold"><i class="bi bi-pencil-square me-2"></i>Update Member</h4>
                 </div>
                 <div class="card-body p-4">
-                    <form asp-action="Edit" method="post">
+                    <form asp-action="Edit" method="post" enctype="multipart/form-data">
                         @Html.AntiForgeryToken()
                         <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="Photo" />
                         <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
                         <!-- Read-Only / Display Fields -->
                         <div class="p-3 bg-light rounded-3 mb-4 border d-flex align-items-center">
                             @if (!string.IsNullOrEmpty(Model.Photo))
                             {
-                                <img src="@Model.Photo" alt="@Model.Name" class="rounded-circle border me-3" width="55" height="55" style="object-fit:cover;" />
+                                var photoSrc = Model.Photo.StartsWith("http") || Model.Photo.StartsWith("/") ? Model.Photo : Url.Content($"~/images/members/{Model.Photo}");
+                                <img src="@photoSrc" alt="@Model.Name" class="rounded-circle border me-3" width="55" height="55" style="object-fit:cover;" />
                             }
                             else
                             {
@@ -25,10 +27,17 @@
                                     @Model.Name.FirstOrDefault()
                                 </div>
                             }
-                            <div>
+                            <div class="flex-grow-1">
                                 <small class="text-muted d-block"><i class="bi bi-lock-fill me-1"></i>Member Name (Locked)</small>
                                 <span class="fw-bold fs-5 text-dark">@Model.Name</span>
                             </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="PhotoFile" class="form-label fw-semibold">Change Profile Photo</label>
+                            <input asp-for="PhotoFile" type="file" class="form-control" accept="image/*" />
+                            <span asp-validation-for="PhotoFile" class="text-danger small"></span>
+                            <small class="text-muted">Leave empty to keep existing photo. Allowed: JPG, JPEG, PNG (max 5 MB)</small>
                         </div>
 
                         <h5 class="text-primary-color mb-3 pb-2 border-bottom">

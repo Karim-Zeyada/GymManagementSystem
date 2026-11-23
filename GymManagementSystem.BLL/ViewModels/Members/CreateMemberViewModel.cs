@@ -59,4 +59,7 @@ public class CreateMemberViewModel
     [Display(Name = "Medical Conditions / Note")]
     [StringLength(500, ErrorMessage = "Note cannot exceed 500 characters.")]
     public string? Note { get; set; }
+
+    [Display(Name = "Profile Photo")]
+    public Microsoft.AspNetCore.Http.IFormFile? Photo { get; set; }
 }

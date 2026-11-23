@@ -10,6 +10,9 @@ public class EditMemberViewModel
     public string? Photo { get; set; }
     public string Name { get; set; } = string.Empty;
 
+    [Display(Name = "Update Profile Photo")]
+    public Microsoft.AspNetCore.Http.IFormFile? PhotoFile { get; set; }
+
     // Editable fields
     [Required(ErrorMessage = "Email is required.")]
     [EmailAddress(ErrorMessage = "Invalid email address format.")]

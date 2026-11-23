@@ -20,13 +20,13 @@ public class TrainerRepository : GenericRepository<Trainer>, ITrainerRepository
 
     public async Task<bool> IsEmailExistsAsync(string email, int? excludeTrainerId = null)
     {
-        return await _context.Users
+        return await _context.GymUsers
             .AnyAsync(u => u.Email.ToLower() == email.Trim().ToLower() && (!excludeTrainerId.HasValue || u.Id != excludeTrainerId.Value));
     }
 
     public async Task<bool> IsPhoneExistsAsync(string phone, int? excludeTrainerId = null)
     {
-        return await _context.Users
+        return await _context.GymUsers
             .AnyAsync(u => u.Phone == phone.Trim() && (!excludeTrainerId.HasValue || u.Id != excludeTrainerId.Value));
     }
 

@@ -8,7 +8,7 @@
                     <h4 class="mb-0 fw-bold"><i class="bi bi-person-plus-fill me-2"></i>Add New Member</h4>
                 </div>
                 <div class="card-body p-4">
-                    <form asp-action="Create" method="post" id="createMemberForm">
+                    <form asp-action="Create" method="post" id="createMemberForm" enctype="multipart/form-data">
                         @Html.AntiForgeryToken()
                         <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
@@ -60,6 +60,12 @@
                                             <option value="">Select Gender</option>
                                         </select>
                                         <span asp-validation-for="Gender" class="text-danger small"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="Photo" class="form-label fw-semibold">Profile Photo</label>
+                                        <input asp-for="Photo" type="file" class="form-control" accept="image/*" />
+                                        <span asp-validation-for="Photo" class="text-danger small"></span>
+                                        <small class="text-muted">Allowed: JPG, JPEG, PNG (max 5 MB)</small>
                                     </div>
                                 </div>
 

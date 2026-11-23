@@ -8,7 +8,8 @@
                     <div class="d-flex align-items-center">
                         @if (!string.IsNullOrEmpty(Model.Photo))
                         {
-                            <img src="@Model.Photo" alt="@Model.Name" class="rounded-circle border border-2 border-white me-3" width="70" height="70" style="object-fit:cover;" />
+                            var photoSrc = Model.Photo.StartsWith("http") || Model.Photo.StartsWith("/") ? Model.Photo : Url.Content($"~/images/members/{Model.Photo}");
+                            <img src="@photoSrc" alt="@Model.Name" class="rounded-circle border border-2 border-white me-3" width="70" height="70" style="object-fit:cover;" />
                         }
                         else
                         {
