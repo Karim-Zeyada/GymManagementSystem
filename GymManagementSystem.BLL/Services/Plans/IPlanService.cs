@@ -8,6 +8,7 @@ public interface IPlanService
     Task<IEnumerable<PlanViewModel>> GetAllPlansAsync();
     Task<PlanDetailsViewModel?> GetPlanDetailsAsync(int id);
     Task<EditPlanViewModel?> GetPlanForEditAsync(int id);
+    Task<Result> CreatePlanAsync(CreatePlanViewModel model);
     Task<Result> UpdatePlanAsync(EditPlanViewModel model);
     Task<Result> ToggleStatusAsync(int id);
 }

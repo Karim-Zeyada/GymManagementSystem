@@ -1,109 +1,95 @@
 @model EditSessionViewModel
 
 @{
-    ViewData["Title"] = "Edit Session";
+    ViewData["Title"] = $"Edit Session #{Model.Id}";
 }
 
-<div class="row justify-content-center my-4">
-    <div class="col-12 col-lg-8">
-        <div class="card shadow-sm border-0 rounded-4">
-            <div class="card-header bg-white border-bottom p-4">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="rounded-circle bg-warning bg-opacity-10 p-3 text-warning">
-                        <i class="bi bi-pencil-square fs-3"></i>
-                    </div>
-                    <div>
-                        <h3 class="fw-bold mb-1">Edit Training Session</h3>
-                        <p class="text-muted mb-0">Update schedule and assigned trainer for session #@Model.Id.</p>
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+            <div class="power-card overflow-hidden">
+                <!-- Header -->
+                <div class="p-4 p-md-5 border-bottom border-subtle">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="p-3 rounded-circle bg-surface-2 border border-subtle text-power-accent d-flex align-items-center justify-content-center" style="width: 52px; height: 52px;">
+                            <i class="bi bi-pencil fs-4"></i>
+                        </div>
+                        <div>
+                            <h1 class="h2 mb-1 fw-bold font-display text-white text-uppercase">Edit Session Schedule</h1>
+                            <p class="text-secondary mb-0 small">Adjust session timing, description, and coach assignment for session #@Model.Id.</p>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="card-body p-4">
-                <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
-                    @Html.AntiForgeryToken()
-                    <input type="hidden" asp-for="Id" />
-                    <input type="hidden" asp-for="CategoryId" />
-                    <input type="hidden" asp-for="CategoryName" />
-                    <input type="hidden" asp-for="Capacity" />
+                <div class="p-4 p-md-5">
+                    <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="CategoryId" />
+                        <input type="hidden" asp-for="CategoryName" />
+                        <input type="hidden" asp-for="Capacity" />
 
-                    <div asp-validation-summary="ModelOnly" class="alert alert-danger shadow-sm mb-4" role="alert"></div>
+                        <div asp-validation-summary="ModelOnly" class="power-alert-danger p-3 mb-4" role="alert"></div>
 
-                    <!-- Locked Fields Notice -->
-                    <div class="p-3 mb-4 rounded-3 border bg-light">
-                        <div class="d-flex align-items-center justify-content-between mb-2">
-                            <span class="badge bg-secondary">
-                                <i class="bi bi-lock-fill me-1"></i>Locked Attributes
-                            </span>
-                            <small class="text-muted fst-italic">Category & Capacity are locked to preserve member booking agreements.</small>
-                        </div>
-                        <div class="row g-3">
-                            <div class="col-6">
-                                <span class="text-muted small d-block">Category</span>
-                                <strong class="fs-6 text-dark">@Model.CategoryName</strong>
+                        <!-- Locked Attributes Notice -->
+                        <div class="power-stat-box mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="power-badge-secondary small">Locked Contract Attributes</span>
+                                <small class="text-secondary fst-italic">Category & Capacity locked to protect existing bookings.</small>
                             </div>
-                            <div class="col-6">
-                                <span class="text-muted small d-block">Capacity</span>
-                                <strong class="fs-6 text-dark">@Model.Capacity Participants</strong>
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <small class="text-secondary d-block font-display text-uppercase">Discipline Category</small>
+                                    <strong class="fs-6 text-white font-display text-uppercase">@Model.CategoryName</strong>
+                                </div>
+                                <div class="col-6">
+                                    <small class="text-secondary d-block font-display text-uppercase">Max Capacity</small>
+                                    <strong class="fs-6 text-white font-mono">@Model.Capacity Athletes</strong>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Editable Section -->
-                    <div class="p-3 mb-4 rounded-3 border bg-light bg-opacity-50">
-                        <h5 class="fw-bold text-primary mb-3">
-                            <i class="bi bi-pencil me-2"></i>Editable Details
-                        </h5>
+                        <!-- Editable Fields -->
+                        <h5 class="font-display fw-bold text-uppercase text-white mb-3 pt-2 border-top border-subtle">Editable Details</h5>
 
-                        <div class="row g-3">
+                        <div class="row g-3 mb-4">
                             <div class="col-12">
-                                <label asp-for="TrainerId" class="form-label fw-semibold">
-                                    Assigned Trainer <span class="text-danger">*</span>
-                                </label>
+                                <label asp-for="TrainerId" class="form-label">Assigned Coach <span class="text-power-accent">*</span></label>
                                 <select asp-for="TrainerId" asp-items="@(ViewBag.Trainers ?? Model.Trainers)" class="form-select">
-                                    <option value="">-- Select Trainer --</option>
+                                    <option value="">-- Select Coach --</option>
                                 </select>
                                 <span asp-validation-for="TrainerId" class="text-danger small"></span>
-                                <small class="text-muted d-block mt-1">
-                                    <i class="bi bi-info-circle me-1"></i>Trainer's specialty must match the locked category: <strong>@Model.CategoryName</strong>.
-                                </small>
+                                <small class="text-secondary d-block mt-1">Coach specialty must align with: <strong class="text-white">@Model.CategoryName</strong>.</small>
                             </div>
 
                             <div class="col-12">
-                                <label asp-for="Description" class="form-label fw-semibold">
-                                    Description <span class="text-danger">*</span>
-                                </label>
+                                <label asp-for="Description" class="form-label">Session Description <span class="text-power-accent">*</span></label>
                                 <textarea asp-for="Description" class="form-control" rows="3"></textarea>
                                 <span asp-validation-for="Description" class="text-danger small"></span>
                             </div>
 
                             <div class="col-12 col-md-6">
-                                <label asp-for="StartDate" class="form-label fw-semibold">
-                                    Start Date & Time <span class="text-danger">*</span>
-                                </label>
-                                <input asp-for="StartDate" type="datetime-local" class="form-control" value="@Model.StartDate.ToString("yyyy-MM-ddTHH:mm")" />
+                                <label asp-for="StartDate" class="form-label">Start Date & Time <span class="text-power-accent">*</span></label>
+                                <input asp-for="StartDate" type="datetime-local" class="form-control font-mono" value="@Model.StartDate.ToString("yyyy-MM-ddTHH:mm")" />
                                 <span asp-validation-for="StartDate" class="text-danger small"></span>
                             </div>
 
                             <div class="col-12 col-md-6">
-                                <label asp-for="EndDate" class="form-label fw-semibold">
-                                    End Date & Time <span class="text-danger">*</span>
-                                </label>
-                                <input asp-for="EndDate" type="datetime-local" class="form-control" value="@Model.EndDate.ToString("yyyy-MM-ddTHH:mm")" />
+                                <label asp-for="EndDate" class="form-label">End Date & Time <span class="text-power-accent">*</span></label>
+                                <input asp-for="EndDate" type="datetime-local" class="form-control font-mono" value="@Model.EndDate.ToString("yyyy-MM-ddTHH:mm")" />
                                 <span asp-validation-for="EndDate" class="text-danger small"></span>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="d-flex justify-content-between align-items-center pt-3 border-top">
-                        <a asp-action="Index" class="btn btn-outline-secondary px-4">
-                            Cancel
-                        </a>
-                        <button type="submit" class="btn btn-warning px-4 shadow-sm fw-semibold">
-                            <i class="bi bi-check2 me-1"></i> Save Changes
-                        </button>
-                    </div>
-                </form>
+                        <div class="d-flex justify-content-between pt-4 border-top border-subtle">
+                            <a asp-action="Index" class="btn-power-ghost">Cancel</a>
+                            <button type="submit" class="btn-power-primary">
+                                <i class="bi bi-check-lg me-2"></i>
+                                Save Schedule Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

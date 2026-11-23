@@ -1,11 +1,13 @@
 using GymManagementSystem.BLL.Services.Sessions;
 using GymManagementSystem.BLL.ViewModels.Sessions;
 using GymManagementSystem.DAL.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace GymManagementSystem.PL.Controllers;
 
+[Authorize]
 public class SessionController : Controller
 {
     private readonly ISessionService _sessionService;
@@ -50,6 +52,7 @@ public class SessionController : Controller
 
     // 3. Create (GET: /Session/Create)
     [HttpGet]
+    [Authorize(Roles = "Admin,Trainer")]
     public async Task<IActionResult> Create()
     {
         _logger.LogInformation("Opening Session Create page.");
@@ -60,6 +63,7 @@ public class SessionController : Controller
 
     // 3. Create (POST: /Session/Create)
     [HttpPost]
+    [Authorize(Roles = "Admin,Trainer")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(CreateSessionViewModel model)
     {
@@ -88,6 +92,7 @@ public class SessionController : Controller
 
     // 4. Edit (GET: /Session/Edit/5)
     [HttpGet]
+    [Authorize(Roles = "Admin,Trainer")]
     public async Task<IActionResult> Edit(int id)
     {
         if (id <= 0)
@@ -118,6 +123,7 @@ public class SessionController : Controller
 
     // 4. Edit (POST: /Session/Edit/5)
     [HttpPost]
+    [Authorize(Roles = "Admin,Trainer")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id, EditSessionViewModel model)
     {
@@ -152,6 +158,7 @@ public class SessionController : Controller
 
     // 5. Delete (GET: /Session/Delete/5)
     [HttpGet]
+    [Authorize(Roles = "Admin,Trainer")]
     public async Task<IActionResult> Delete(int id)
     {
         if (id <= 0)
@@ -181,6 +188,7 @@ public class SessionController : Controller
 
     // 5. DeleteConfirmed (POST: /Session/Delete/5)
     [HttpPost, ActionName("Delete")]
+    [Authorize(Roles = "Admin,Trainer")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {

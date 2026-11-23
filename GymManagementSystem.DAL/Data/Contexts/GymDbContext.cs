@@ -1,9 +1,10 @@
 using GymManagementSystem.DAL.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace GymManagementSystem.DAL.Data.Contexts
 {
-    public class GymDbContext : DbContext
+    public class GymDbContext : IdentityDbContext<ApplicationUser>
     {
         public GymDbContext()
         {
@@ -15,20 +16,18 @@ namespace GymManagementSystem.DAL.Data.Contexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(GymDbContext).Assembly);
         }
 
         public DbSet<Plan> Plans { get; set; }
-
         public DbSet<Category> Categories { get; set; }
-        public DbSet<User> Users { get; set; }    
+        public DbSet<User> GymUsers { get; set; }
         public DbSet<Member> Members { get; set; }
         public DbSet<Trainer> Trainers { get; set; }
         public DbSet<Session> Sessions { get; set; }
         public DbSet<Membership> Memberships { get; set; }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<HealthRecord> HealthRecords { get; set; }
-
-
     }
 }

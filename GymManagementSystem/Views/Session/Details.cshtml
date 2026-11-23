@@ -1,127 +1,192 @@
 @model SessionDetailsViewModel
 
 @{
-    ViewData["Title"] = "Session Details";
-
-    var headerBg = Model.Status switch
-    {
-        SessionStatus.Upcoming => "background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);",
-        SessionStatus.Ongoing => "background: linear-gradient(135deg, #065f46 0%, #10b981 100%);",
-        SessionStatus.Completed => "background: linear-gradient(135deg, #4b5563 0%, #9ca3af 100%);",
-        _ => "background: #6c757d;"
-    };
-
-    var badgeText = Model.Status switch
-    {
-        SessionStatus.Upcoming => "🔵 Upcoming",
-        SessionStatus.Ongoing => "🟢 Ongoing",
-        SessionStatus.Completed => "⚪ Completed",
-        _ => "Status"
-    };
+    ViewData["Title"] = $"{Model.CategoryName} - Session Details";
+    var percent = Model.Capacity > 0 ? Math.Min(100, (int)Math.Round((double)Model.BookedSlots / Model.Capacity * 100)) : 0;
 }
 
-<div class="row justify-content-center my-4">
-    <div class="col-12 col-lg-8">
-        <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
-            <!-- Header with Status Colour -->
-            <div class="card-header text-white p-4 d-flex justify-content-between align-items-center" style="@headerBg">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="rounded-circle bg-white bg-opacity-20 p-3">
-                        <i class="bi bi-calendar-check-fill fs-3 text-white"></i>
-                    </div>
-                    <div>
-                        <h3 class="fw-bold mb-0 text-white">@Model.CategoryName Session</h3>
-                        <span class="small text-white-50">Session ID #@Model.Id</span>
-                    </div>
-                </div>
-                <span class="badge bg-light text-dark fs-6 px-3 py-2 rounded-pill shadow-sm">
-                    @badgeText
-                </span>
-            </div>
-
-            <div class="card-body p-4">
-                <div class="row g-3">
-                    <!-- Category -->
-                    <div class="col-12 col-md-6">
-                        <div class="p-3 rounded-3 bg-light border">
-                            <span class="text-muted small d-block mb-1">
-                                <i class="bi bi-tag-fill text-info me-1"></i>Category
-                            </span>
-                            <strong class="fs-5 text-dark">@Model.CategoryName</strong>
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-9">
+            <div class="power-card overflow-hidden">
+                <!-- Header -->
+                <div class="p-4 p-md-5 border-bottom border-subtle" style="background: linear-gradient(180deg, rgba(255, 85, 0, 0.08) 0%, rgba(20, 23, 31, 0.6) 100%);">
+                    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="p-3 rounded-circle bg-surface-2 border border-subtle">
+                                <i class="bi bi-trophy-fill text-power-accent fs-2"></i>
+                            </div>
+                            <div>
+                                <div class="d-flex align-items-center gap-2 mb-1">
+                                    <h1 class="h2 mb-0 fw-bold font-display text-white text-uppercase">@Model.CategoryName</h1>
+                                    <span class="power-badge-primary">#@Model.Id</span>
+                                </div>
+                                <span class="text-secondary small font-mono" style="color: #CBD5E1 !important;">Assigned Coach: <strong class="text-white">@Model.TrainerName</strong></span>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Trainer -->
-                    <div class="col-12 col-md-6">
-                        <div class="p-3 rounded-3 bg-light border">
-                            <span class="text-muted small d-block mb-1">
-                                <i class="bi bi-person-fill text-warning me-1"></i>Assigned Trainer
+                        @if (Model.Status == SessionStatus.Upcoming)
+                        {
+                            <span class="power-badge-upcoming">
+                                <span class="power-pip power-pip-info"></span>
+                                Upcoming
                             </span>
-                            <strong class="fs-5 text-dark">@Model.TrainerName</strong>
-                        </div>
-                    </div>
-
-                    <!-- Capacity -->
-                    <div class="col-12 col-md-6">
-                        <div class="p-3 rounded-3 bg-light border">
-                            <span class="text-muted small d-block mb-1">
-                                <i class="bi bi-people-fill text-success me-1"></i>Capacity (Booked / Max)
+                        }
+                        else if (Model.Status == SessionStatus.Ongoing)
+                        {
+                            <span class="power-badge-active">
+                                <span class="power-pip power-pip-success"></span>
+                                Ongoing
                             </span>
-                            <strong class="fs-5 text-dark">@Model.CapacityString</strong>
-                        </div>
-                    </div>
-
-                    <!-- Duration -->
-                    <div class="col-12 col-md-6">
-                        <div class="p-3 rounded-3 bg-light border">
-                            <span class="text-muted small d-block mb-1">
-                                <i class="bi bi-stopwatch-fill text-purple me-1"></i>Computed Duration
+                        }
+                        else
+                        {
+                            <span class="power-badge-expired">
+                                <span class="power-pip power-pip-expired"></span>
+                                Completed
                             </span>
-                            <strong class="fs-5 text-dark">@Model.DurationString</strong>
-                        </div>
-                    </div>
-
-                    <!-- Start Time -->
-                    <div class="col-12 col-md-6">
-                        <div class="p-3 rounded-3 bg-light border">
-                            <span class="text-muted small d-block mb-1">
-                                <i class="bi bi-clock-fill text-primary me-1"></i>Start Time
-                            </span>
-                            <strong class="text-dark">@Model.StartDate.ToString("f")</strong>
-                        </div>
-                    </div>
-
-                    <!-- End Time -->
-                    <div class="col-12 col-md-6">
-                        <div class="p-3 rounded-3 bg-light border">
-                            <span class="text-muted small d-block mb-1">
-                                <i class="bi bi-clock-history text-secondary me-1"></i>End Time
-                            </span>
-                            <strong class="text-dark">@Model.EndDate.ToString("f")</strong>
-                        </div>
-                    </div>
-
-                    <!-- Description -->
-                    <div class="col-12">
-                        <div class="p-3 rounded-3 bg-light border">
-                            <span class="text-muted small d-block mb-1">
-                                <i class="bi bi-file-text-fill text-primary me-1"></i>Description
-                            </span>
-                            <p class="mb-0 text-dark">@Model.Description</p>
-                        </div>
+                        }
                     </div>
                 </div>
 
-                <!-- Footer with Back Button -->
-                <div class="d-flex justify-content-between align-items-center pt-4 mt-3 border-top">
-                    <a asp-action="Index" class="btn btn-outline-secondary px-4">
-                        <i class="bi bi-arrow-left me-1"></i> Back to List
+                <div class="p-4 p-md-5">
+                    <!-- Session Metrics Grid -->
+                    <h5 class="font-display fw-bold text-uppercase text-white mb-3">Session Specifications</h5>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-12 col-md-6">
+                            <div class="power-stat-box">
+                                <small class="text-secondary d-block mb-1 text-uppercase font-display" style="color: #94A3B8 !important;">Start Time</small>
+                                <span class="fw-bold text-white fs-6 font-mono">@Model.StartDate.ToString("dddd, MMM dd, yyyy @ HH:mm")</span>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="power-stat-box">
+                                <small class="text-secondary d-block mb-1 text-uppercase font-display" style="color: #94A3B8 !important;">End Time</small>
+                                <span class="fw-bold text-white fs-6 font-mono">@Model.EndDate.ToString("dddd, MMM dd, yyyy @ HH:mm")</span>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="power-stat-box">
+                                <small class="text-secondary d-block mb-1 text-uppercase font-display" style="color: #94A3B8 !important;">Duration</small>
+                                <span class="fw-bold text-white fs-6 font-mono">@Model.DurationString</span>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="power-stat-box">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <small class="text-secondary text-uppercase font-display" style="color: #94A3B8 !important;">Occupancy</small>
+                                    <span class="font-mono text-power-accent fw-bold small">@Model.CapacityString</span>
+                                </div>
+                                <div class="power-progress mt-2">
+                                    <div class="power-progress-bar" style="width: @percent%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="power-stat-box">
+                                <small class="text-secondary d-block mb-1 text-uppercase font-display" style="color: #94A3B8 !important;">Workout Description & Goals</small>
+                                <p class="mb-0 text-white font-mono small" style="color: #CBD5E1 !important;">@Model.Description</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Enrolled Members Roster -->
+                    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 mb-3 pt-3 border-top border-subtle">
+                        <div>
+                            <h5 class="font-display fw-bold text-uppercase text-white mb-1 d-flex align-items-center gap-2">
+                                <i class="bi bi-people-fill text-power-accent"></i>
+                                Enrolled Athletes (@Model.BookedSlots / @Model.Capacity)
+                            </h5>
+                            <small class="text-secondary" style="color: #CBD5E1 !important;">Live attendance confirmation and slot management.</small>
+                        </div>
+
+                        @if (Model.BookedSlots < Model.Capacity)
+                        {
+                            <a asp-controller="Booking" asp-action="Create" asp-route-sessionId="@Model.Id" class="btn-power-outline py-1 px-3 small text-white">
+                                <i class="bi bi-plus-lg me-1 text-power-accent"></i>
+                                Book Athlete
+                            </a>
+                        }
+                    </div>
+
+                    @if (Model.EnrolledMembers != null && Model.EnrolledMembers.Any())
+                    {
+                        <div class="power-table-wrapper mb-4">
+                            <div class="table-responsive">
+                                <table class="table power-table align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th class="ps-4">Athlete</th>
+                                            <th>Contact Phone</th>
+                                            <th>Attendance Status</th>
+                                            <th class="text-end pe-4">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var b in Model.EnrolledMembers)
+                                        {
+                                            <tr>
+                                                <td class="ps-4">
+                                                    <span class="fw-bold text-white">@b.MemberName</span>
+                                                </td>
+                                                <td>
+                                                    <span class="font-mono small" style="color: #CBD5E1 !important;">@b.MemberPhone</span>
+                                                </td>
+                                                <td>
+                                                    <form asp-controller="Booking" asp-action="ToggleAttendance" asp-route-id="@b.Id" method="post" class="d-inline">
+                                                        @Html.AntiForgeryToken()
+                                                        <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+                                                        @if (b.IsAttended)
+                                                        {
+                                                            <button type="submit" class="power-badge-active" style="cursor: pointer; border: 1px solid rgba(16, 185, 129, 0.4);">
+                                                                <i class="bi bi-check-circle-fill me-1"></i>
+                                                                Attended
+                                                            </button>
+                                                        }
+                                                        else
+                                                        {
+                                                            <button type="submit" class="power-badge-secondary" style="cursor: pointer;">
+                                                                <span class="power-pip power-pip-info"></span>
+                                                                Mark Present
+                                                            </button>
+                                                        }
+                                                    </form>
+                                                </td>
+                                                <td class="text-end pe-4">
+                                                    <form asp-controller="Booking" asp-action="Cancel" asp-route-id="@b.Id" method="post" class="d-inline" onsubmit="return confirm('Cancel this athlete booking?');">
+                                                        @Html.AntiForgeryToken()
+                                                        <button type="submit" class="btn-action-delete" title="Cancel Booking">
+                                                            <i class="bi bi-x-circle-fill"></i>
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="power-card text-center py-4 px-3 mb-4">
+                            <span class="text-secondary small font-mono" style="color: #CBD5E1 !important;">No athletes enrolled in this session yet.</span>
+                        </div>
+                    }
+                </div>
+
+                <!-- Footer -->
+                <div class="p-4 bg-surface-2 border-top border-subtle d-flex flex-column flex-sm-row justify-content-between gap-3">
+                    <a asp-action="Index" class="btn-power-ghost text-white">
+                        <i class="bi bi-arrow-left me-1"></i> Back to Schedule
                     </a>
 
                     @if (Model.Status == SessionStatus.Upcoming)
                     {
-                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning px-4">
-                            <i class="bi bi-pencil me-1"></i> Edit Session
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn-power-primary">
+                            <i class="bi bi-pencil-fill me-2"></i>
+                            Edit Session
                         </a>
                     }
                 </div>

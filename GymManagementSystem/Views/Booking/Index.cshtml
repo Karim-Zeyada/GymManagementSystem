@@ -1,0 +1,184 @@
+@model SessionScheduleViewModel
+
+@{
+    ViewData["Title"] = "Sessions Schedule & Bookings";
+}
+
+<div class="container-fluid py-4">
+    <header class="d-flex justify-content-between align-items-center mb-5 flex-wrap gap-3">
+        <div>
+            <div class="d-flex align-items-center gap-2 mb-2">
+                <i class="bi bi-calendar3 text-power-accent fs-4"></i>
+                <span class="text-power-accent font-display text-uppercase fw-bold" style="letter-spacing: 1px;">WORKOUT ROSTER</span>
+            </div>
+            <h1 class="display-5 text-white mb-0 fw-bold font-display text-uppercase">SCHEDULE & BOOKINGS HUB</h1>
+            <p class="text-secondary" style="color: #CBD5E1 !important;">Live session capacity meters, athlete registration, and one-click attendance check-in</p>
+        </div>
+        <div>
+            <a asp-action="Create" class="btn btn-power-primary px-4 shadow-sm">
+                <i class="bi bi-person-plus-fill me-2 fs-6"></i>
+                Book Athlete Into Session
+            </a>
+        </div>
+    </header>
+
+    <!-- 1. Upcoming Workout Sessions Cards Grid -->
+    <div class="mb-5">
+        <h3 class="text-white font-display text-uppercase mb-4 d-flex align-items-center gap-2">
+            <i class="bi bi-fire text-power-accent fs-4"></i>
+            Live & Upcoming Workout Sessions
+        </h3>
+
+        @if (Model.UpcomingSessions != null && Model.UpcomingSessions.Any())
+        {
+            <div class="row g-4">
+                @foreach (var session in Model.UpcomingSessions)
+                {
+                    var isFull = session.BookedSlots >= session.Capacity;
+                    var percent = session.Capacity > 0 ? (int)((double)session.BookedSlots / session.Capacity * 100) : 0;
+                    var statusBadge = isFull ? "power-badge-danger" : "power-badge-active";
+                    var pipClass = isFull ? "power-pip-danger" : "power-pip-success";
+
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="power-card power-card-interactive h-100 d-flex flex-column overflow-hidden">
+                            <div class="p-4 border-bottom border-secondary border-opacity-25 bg-black bg-opacity-25 d-flex justify-content-between align-items-center">
+                                <h4 class="fw-bold text-white font-display text-uppercase mb-0">@session.CategoryName</h4>
+                                <span class="badge @statusBadge font-mono" style="font-size: 0.7rem;">
+                                    <span class="power-pip @pipClass"></span>
+                                    @(isFull ? "FULL" : "AVAILABLE")
+                                </span>
+                            </div>
+
+                            <div class="p-4 d-flex flex-column flex-grow-1">
+                                <div class="mb-3">
+                                    <div class="text-secondary small font-display text-uppercase mb-1" style="color: #CBD5E1 !important;">
+                                        <i class="bi bi-person-fill text-power-accent me-1"></i>
+                                        Assigned Coach
+                                    </div>
+                                    <div class="fw-bold text-white fs-6">@session.TrainerName</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <div class="text-secondary small font-display text-uppercase mb-1" style="color: #CBD5E1 !important;">
+                                        <i class="bi bi-clock-fill text-power-accent me-1"></i>
+                                        Timing & Duration
+                                    </div>
+                                    <div class="fw-semibold text-white font-mono">@session.StartDate.ToString("ddd, MMM dd yyyy")</div>
+                                    <div class="text-secondary small font-mono" style="color: #CBD5E1 !important;">@session.TimeString &bull; @session.DurationString</div>
+                                </div>
+
+                                <!-- Capacity Progress Bar -->
+                                <div class="mb-4 mt-auto">
+                                    <div class="d-flex justify-content-between small text-secondary font-mono mb-2" style="color: #CBD5E1 !important;">
+                                        <span>Capacity Roster</span>
+                                        <strong class="@(isFull ? "text-danger" : "text-power-accent")">@session.BookedSlots / @session.Capacity Booked</strong>
+                                    </div>
+                                    <div class="power-progress">
+                                        <div class="power-progress-bar @(isFull ? "bg-danger" : "")" style="width: @percent%;"></div>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex gap-2">
+                                    <a asp-controller="Session" asp-action="Details" asp-route-id="@session.Id" class="btn btn-power-outline btn-sm flex-fill justify-content-center text-white">
+                                        Roster Details
+                                    </a>
+                                    @if (!isFull)
+                                    {
+                                        <a asp-action="Create" asp-route-sessionId="@session.Id" class="btn btn-power-primary btn-sm flex-fill justify-content-center">
+                                            Book Athlete
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="power-card text-center py-4">
+                <p class="text-secondary mb-0 font-mono" style="color: #CBD5E1 !important;">No upcoming sessions scheduled on the calendar.</p>
+            </div>
+        }
+    </div>
+
+    <!-- 2. Active Bookings Roster -->
+    <div>
+        <h3 class="text-white font-display text-uppercase mb-4 d-flex align-items-center gap-2">
+            <i class="bi bi-check2-circle text-power-accent fs-4"></i>
+            Athlete Attendance & Booking Roster
+        </h3>
+
+        @if (Model.RecentBookings != null && Model.RecentBookings.Any())
+        {
+            <div class="power-table-wrapper">
+                <div class="table-responsive">
+                    <table class="power-table">
+                        <thead>
+                            <tr>
+                                <th class="ps-4">Athlete</th>
+                                <th>Contact</th>
+                                <th>Session</th>
+                                <th>Coach</th>
+                                <th>Class Time</th>
+                                <th>Attendance Check</th>
+                                <th class="text-end pe-4">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var b in Model.RecentBookings)
+                            {
+                                <tr>
+                                    <td class="ps-4">
+                                        <div class="fw-bold text-white font-display text-uppercase">@b.MemberName</div>
+                                        <span class="text-muted small font-mono" style="color: #94A3B8 !important;">Athlete ID #@b.MemberId</span>
+                                    </td>
+                                    <td>
+                                        <div class="small font-mono text-white">@b.MemberEmail</div>
+                                        <div class="small font-mono" style="color: #CBD5E1 !important;">@b.MemberPhone</div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-black bg-opacity-40 border border-secondary border-opacity-25 text-white font-mono px-3 py-2">
+                                            @b.SessionCategory
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="text-white fw-semibold">@b.TrainerName</span>
+                                    </td>
+                                    <td>
+                                        <div class="fw-semibold text-white font-mono">@b.DateString</div>
+                                        <div class="text-muted small font-mono" style="color: #94A3B8 !important;">@b.TimeString</div>
+                                    </td>
+                                    <td>
+                                        <form asp-action="ToggleAttendance" asp-route-id="@b.Id" method="post" class="d-inline m-0">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-sm @(b.IsAttended ? "power-badge-active" : "btn-power-outline") rounded-pill px-3 font-mono" style="font-size: 0.75rem;" title="Click to toggle attendance status">
+                                                <span class="power-pip @(b.IsAttended ? "power-pip-success" : "power-pip-expired")"></span>
+                                                @(b.IsAttended ? "ATTENDED" : "MARK PRESENT")
+                                            </button>
+                                        </form>
+                                    </td>
+                                    <td class="text-end pe-4">
+                                        <form asp-action="Cancel" asp-route-id="@b.Id" method="post" class="d-inline m-0" onsubmit="return confirm('Cancel this session booking reservation?');">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn-action-delete" title="Cancel Booking">
+                                                <i class="bi bi-trash3-fill"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="power-card text-center py-4">
+                <p class="text-secondary mb-0 font-mono" style="color: #CBD5E1 !important;">No athlete session registrations recorded yet.</p>
+            </div>
+        }
+    </div>
+</div>

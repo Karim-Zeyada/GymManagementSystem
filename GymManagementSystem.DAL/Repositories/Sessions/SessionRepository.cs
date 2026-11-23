@@ -27,6 +27,7 @@ public class SessionRepository : GenericRepository<Session>, ISessionRepository
             .Include(s => s.Category)
             .Include(s => s.Trainer)
             .Include(s => s.Bookings)
+                .ThenInclude(b => b.Member)
             .FirstOrDefaultAsync(s => s.Id == id);
     }
 

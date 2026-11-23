@@ -1,71 +1,70 @@
 @model DeleteSessionViewModel
 
 @{
-    ViewData["Title"] = "Delete Session Confirmation";
+    ViewData["Title"] = $"Delete Session #{Model.Id}";
 }
 
-<div class="row justify-content-center my-4">
-    <div class="col-12 col-lg-7">
-        <div class="card shadow-sm border-danger border-opacity-25 rounded-4 overflow-hidden">
-            <div class="card-header bg-danger text-white p-4">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="rounded-circle bg-white bg-opacity-20 p-3">
-                        <i class="bi bi-exclamation-triangle-fill fs-3 text-white"></i>
-                    </div>
-                    <div>
-                        <h3 class="fw-bold mb-0 text-white">Delete Session Confirmation</h3>
-                        <span class="small text-white-50">Permanent Deletion</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card-body p-4">
-                <!-- Explicit Warning Banner -->
-                <div class="alert alert-danger d-flex align-items-center mb-4 rounded-3 shadow-sm" role="alert">
-                    <i class="bi bi-shield-slash-fill fs-4 me-3 text-danger"></i>
-                    <div>
-                        <strong class="d-block">Permanent Action Warning:</strong>
-                        <span>Deleting this session will permanently cancel and remove all <strong>@Model.BookedSlots</strong> associated member booking(s). This action cannot be undone.</span>
-                    </div>
-                </div>
-
-                <div class="bg-light p-3 rounded-3 border mb-4">
-                    <h5 class="fw-bold mb-3 text-dark border-bottom pb-2">Session Details to be Deleted:</h5>
-                    <div class="row g-2">
-                        <div class="col-sm-4 text-muted">Session ID:</div>
-                        <div class="col-sm-8 fw-semibold text-dark">#@Model.Id</div>
-
-                        <div class="col-sm-4 text-muted">Category:</div>
-                        <div class="col-sm-8 fw-semibold text-dark">@Model.CategoryName</div>
-
-                        <div class="col-sm-4 text-muted">Trainer:</div>
-                        <div class="col-sm-8 fw-semibold text-dark">@Model.TrainerName</div>
-
-                        <div class="col-sm-4 text-muted">Start Time:</div>
-                        <div class="col-sm-8 fw-semibold text-dark">@Model.StartDate.ToString("f")</div>
-
-                        <div class="col-sm-4 text-muted">End Time:</div>
-                        <div class="col-sm-8 fw-semibold text-dark">@Model.EndDate.ToString("f")</div>
-
-                        <div class="col-sm-4 text-muted">Booked Slots:</div>
-                        <div class="col-sm-8">
-                            <span class="badge bg-warning text-dark px-2 py-1">@Model.BookedSlots Active Bookings</span>
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-7">
+            <div class="power-card overflow-hidden" style="border-top: 4px solid var(--status-danger);">
+                <!-- Header -->
+                <div class="p-4 p-md-5 border-bottom border-subtle">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="p-3 rounded-circle bg-surface-2 border border-subtle text-danger d-flex align-items-center justify-content-center" style="width: 52px; height: 52px;">
+                            <i class="bi bi-trash3 fs-4"></i>
+                        </div>
+                        <div>
+                            <span class="power-badge-danger mb-1">Destructive Action</span>
+                            <h1 class="h3 mb-0 fw-bold font-display text-white text-uppercase">Delete Session #@Model.Id</h1>
                         </div>
                     </div>
                 </div>
 
-                <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
-                    @Html.AntiForgeryToken()
-                    <input type="hidden" asp-for="Id" />
-                    <div class="d-flex justify-content-between align-items-center pt-2">
-                        <a asp-action="Index" class="btn btn-outline-secondary px-4">
-                            <i class="bi bi-x-circle me-1"></i> Cancel
-                        </a>
-                        <button type="submit" class="btn btn-danger px-4 shadow-sm fw-bold">
-                            <i class="bi bi-trash-fill me-1"></i> Confirm Delete
-                        </button>
+                <div class="p-4 p-md-5">
+                    <!-- Warning Banner -->
+                    <div class="power-alert-danger p-3 mb-4 d-flex align-items-center gap-3">
+                        <i class="bi bi-exclamation-triangle-fill fs-4 text-danger flex-shrink-0"></i>
+                        <div class="small">
+                            <strong>Permanent Deletion:</strong> Removing this session will permanently cancel and erase all <strong>@Model.BookedSlots active member booking(s)</strong>.
+                        </div>
                     </div>
-                </form>
+
+                    <!-- Summary Box -->
+                    <div class="power-stat-box mb-4">
+                        <div class="row g-2 font-mono small">
+                            <div class="col-sm-4 text-secondary text-uppercase font-display">Discipline:</div>
+                            <div class="col-sm-8 fw-semibold text-white">@Model.CategoryName</div>
+
+                            <div class="col-sm-4 text-secondary text-uppercase font-display">Coach:</div>
+                            <div class="col-sm-8 fw-semibold text-white">@Model.TrainerName</div>
+
+                            <div class="col-sm-4 text-secondary text-uppercase font-display">Start Time:</div>
+                            <div class="col-sm-8 fw-semibold text-white">@Model.StartDate.ToString("f")</div>
+
+                            <div class="col-sm-4 text-secondary text-uppercase font-display">End Time:</div>
+                            <div class="col-sm-8 fw-semibold text-white">@Model.EndDate.ToString("f")</div>
+
+                            <div class="col-sm-4 text-secondary text-uppercase font-display">Active Bookings:</div>
+                            <div class="col-sm-8">
+                                <span class="power-badge-primary">@Model.BookedSlots Enrolled</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="Id" />
+
+                        <div class="d-flex justify-content-between gap-3">
+                            <a asp-action="Index" class="btn-power-ghost flex-fill justify-content-center">Cancel</a>
+                            <button type="submit" class="btn-power-danger flex-fill justify-content-center">
+                                <i class="bi bi-trash3 me-2"></i>
+                                Confirm Delete
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

@@ -1,61 +1,107 @@
-<header>
-        <!-- ^ navbar -->
-        <nav class="navbar navbar-expand-lg bg-white my-3">
-            <div class="container">
-                <a class="navbar-brand" asp-controller="Home" asp-action="Index">
-                    <img src="~/images/logo.jpg" alt="" />
-                </a>
-                <button class="navbar-toggler"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#navbarSupportedContent"
-                        aria-controls="navbarSupportedContent"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+@{
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "Home";
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "Index";
+}
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav m-auto mb-2 mb-lg-0 mt-3 mt-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2 mx-2 fw-bolder fs-5 text-black-alternative"
-                               asp-action="Index" asp-controller="Home">Home</a>
-                        </li>
-                        
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2 mx-2 fw-bolder fs-5 text-black-alternative"
-                               asp-action="Index" asp-controller="Member">Members</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2 mx-2 fw-bolder fs-5 text-black-alternative"
-                               asp-action="Index" asp-controller="Trainer">Trainers</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2 mx-2 fw-bolder fs-5 text-black-alternative"
-                               asp-action="Index" asp-controller="Session">Session</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2 mx-2 fw-bolder fs-5 text-black-alternative"
-                               asp-action="Index" asp-controller="Plans">Plans</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2 mx-2 fw-bolder fs-5 text-black-alternative"
-                               asp-action="Index" asp-controller="MemberShip">MemberShips</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-3 py-2 mx-2 fw-bolder fs-5 text-black-alternative"
-                               asp-action="Index" asp-controller="Booking">Sessions Schedule</a>
-                        </li>
-                        <li class="nav-item">
-                            <form asp-action="Logout" asp-controller="Account" method="post" class="d-inline">
-                                <button type="submit" class="btn btn-link nav-link px-3 py-2 mx-2 fw-bolder fs-5 text-black-alternative">
-                                    Logout
-                                </button>
-                            </form>
-                        </li>
-                    </ul>
+<header class="power-navbar-container">
+    <div class="container">
+        <nav class="navbar navbar-expand-xl power-navbar">
+            <!-- Brand Logo -->
+            <a class="navbar-brand d-flex align-items-center gap-2 me-3 text-decoration-none" asp-controller="Home" asp-action="Index">
+                <div class="d-flex align-items-center justify-content-center rounded-circle bg-power-accent text-white" style="width: 34px; height: 34px; box-shadow: 0 0 14px var(--accent-glow);">
+                    <i class="bi bi-fire fs-5 text-white"></i>
+                </div>
+                <span class="font-display fw-bold text-white text-uppercase tracking-wider fs-5 mb-0">POWER<span class="text-power-accent">FITNESS</span></span>
+            </a>
+
+            <!-- Mobile Toggler -->
+            <button class="navbar-toggler border-0 text-white"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#powerNavbarNav"
+                    aria-controls="powerNavbarNav"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+            </button>
+
+            <!-- Navigation Links -->
+            <div class="collapse navbar-collapse" id="powerNavbarNav">
+                <ul class="navbar-nav m-auto mb-2 mb-xl-0 gap-1 align-items-center">
+                    <li class="nav-item">
+                        <a class="power-nav-link @(currentController == "Home" ? "active" : "")"
+                           asp-action="Index" asp-controller="Home">
+                            Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="power-nav-link @(currentController == "Plans" ? "active" : "")"
+                           asp-action="Index" asp-controller="Plans">
+                            Plans
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="power-nav-link @(currentController == "Booking" ? "active" : "")"
+                           asp-action="Index" asp-controller="Booking">
+                            Schedule
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="power-nav-link @(currentController == "Session" ? "active" : "")"
+                           asp-action="Index" asp-controller="Session">
+                            Sessions
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="power-nav-link @(currentController == "Member" ? "active" : "")"
+                           asp-action="Index" asp-controller="Member">
+                            Members
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="power-nav-link @(currentController == "MemberShip" ? "active" : "")"
+                           asp-action="Index" asp-controller="MemberShip">
+                            Subscriptions
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="power-nav-link @(currentController == "Trainer" ? "active" : "")"
+                           asp-action="Index" asp-controller="Trainer">
+                            Trainers
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Auth & User Role Badge -->
+                <div class="d-flex align-items-center gap-2 mt-3 mt-xl-0">
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        var role = User.IsInRole("Admin") ? "ADMIN" : User.IsInRole("Trainer") ? "TRAINER" : "MEMBER";
+                        var roleBadgeClass = User.IsInRole("Admin") ? "power-badge-danger" : "power-badge-upcoming";
+
+                        <div class="d-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-black bg-opacity-40 border border-secondary border-opacity-25">
+                            <span class="power-pip @(User.IsInRole("Admin") ? "power-pip-danger" : "power-pip-info")"></span>
+                            <span class="small fw-semibold text-white">@(User.Identity?.Name?.Split('@')[0] ?? "User")</span>
+                            <span class="badge @roleBadgeClass px-2 py-1 font-mono" style="font-size: 0.65rem;">@role</span>
+                        </div>
+
+                        <form asp-action="Logout" asp-controller="Account" method="post" class="d-inline m-0">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-power-outline btn-sm py-1 px-3 d-inline-flex align-items-center gap-1" title="Sign Out">
+                                <i class="bi bi-box-arrow-right"></i>
+                                <span class="d-none d-xxl-inline">Logout</span>
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <a class="btn btn-power-primary btn-sm px-4" asp-action="Login" asp-controller="Account">
+                            <i class="bi bi-shield-lock-fill me-1"></i>
+                            Sign In
+                        </a>
+                    }
                 </div>
             </div>
         </nav>
-
-    </header>
+    </div>
+</header>
